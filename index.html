@@ -118,10 +118,23 @@ body {
 
 
 /* =========================================
-   SHOW BOX WHEN HOVERING
+   SHOW BOX WHEN HOVERING ON COMPUTER
    ========================================= */
 
-.map-point:hover .description {
+@media (hover: hover) {
+
+    .map-point:hover .description {
+        display: block;
+    }
+
+}
+
+
+/* =========================================
+   SHOW BOX WHEN TAPPED
+   ========================================= */
+
+.map-point.active .description {
     display: block;
 }
 
@@ -149,7 +162,7 @@ body {
 
 .position-right .description {
 
-    bottom: -300px;
+    top: -150px;
     right: 40px;
 
 }
@@ -208,7 +221,7 @@ body {
 
 
 /* =========================================
-   IMAGE INSIDE BOX
+   IMAGE INSIDE DESCRIPTION
    ========================================= */
 
 .description img {
@@ -249,25 +262,145 @@ body {
 
 
 /* =========================================
-   MOBILE
+   iPAD / TABLET
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .description {
+
+        max-width: calc(100vw - 20px);
+
+        padding: 12px;
+
+    }
+
+    .description h2 {
+
+        font-size: 17px;
+
+    }
+
+    .description p {
+
+        font-size: 12px;
+
+        line-height: 1.4;
+
+    }
+
+    .description a {
+
+        font-size: 12px;
+
+    }
+
+}
+
+
+/* =========================================
+   iPHONE / SMALL PHONE
    ========================================= */
 
 @media (max-width: 600px) {
 
     body {
+
         padding: 5px;
+
     }
 
     .description {
+
+        /*
+        Keeps your custom width,
+        but prevents the box from becoming
+        wider than the phone screen.
+        */
+
+        width: min(
+            var(--box-width, 260px),
+            calc(100vw - 20px)
+        );
+
         max-width: calc(100vw - 20px);
+
+        padding: 10px;
+
+        border-radius: 8px;
+
     }
 
     .description h2 {
-        font-size: 17px;
+
+        font-size: 15px;
+
+        margin-bottom: 5px;
+
     }
 
     .description p {
-        font-size: 13px;
+
+        font-size: 11px;
+
+        line-height: 1.3;
+
+        margin-bottom: 6px;
+
+    }
+
+    .description a {
+
+        font-size: 11px;
+
+        margin-top: 6px;
+
+    }
+
+}
+
+
+/* =========================================
+   VERY SMALL iPHONE
+   ========================================= */
+
+@media (max-width: 400px) {
+
+    .description {
+
+        width: min(
+            var(--box-width, 240px),
+            calc(100vw - 16px)
+        );
+
+        max-width: calc(100vw - 16px);
+
+        padding: 8px;
+
+    }
+
+    .description h2 {
+
+        font-size: 14px;
+
+    }
+
+    .description p {
+
+        font-size: 10px;
+
+        line-height: 1.25;
+
+    }
+
+    .description a {
+
+        font-size: 10px;
+
     }
 
 }
@@ -335,7 +468,7 @@ body {
 
 
     <!-- =====================================
-         LOCATION 2
+         LOCATION 2 - CHINA
          ===================================== -->
 
     <div
@@ -351,9 +484,8 @@ body {
             <h2>China</h2>
 
             <p>
-                The history of the Mid‑Autumn Festival in China is linked to ancient moon‑worship and harvest customs. Early traditions included autumn moon sacrifices, and by the Tang and Song dynasties, moon‑viewing became an important festive activity. In the Northern Song, it developed into a formal festival. Today, the Mid‑Autumn Festival emphasizes “reunion,” with families gathering to admire the moon, eat mooncakes, and sometimes engage in rituals such as moon worship and lantern displays.
+                The history of the Mid-Autumn Festival in China is linked to ancient moon-worship and harvest customs. Early traditions included autumn moon sacrifices, and by the Tang and Song dynasties, moon-viewing became an important festive activity. In the Northern Song, it developed into a formal festival. Today, the Mid-Autumn Festival emphasizes “reunion,” with families gathering to admire the moon, eat mooncakes, and sometimes engage in rituals such as moon worship and lantern displays.
             </p>
-
 
         </div>
 
@@ -417,6 +549,66 @@ body {
 
 
 </div>
+
+
+<!-- =========================================
+     PHONE / TABLET TAP FUNCTION
+     ========================================= -->
+
+<script>
+
+const points = document.querySelectorAll(".map-point");
+
+
+points.forEach(point => {
+
+    point.addEventListener("click", function(event) {
+
+        event.stopPropagation();
+
+
+        /*
+        Close all other boxes
+        */
+
+        points.forEach(otherPoint => {
+
+            if (otherPoint !== point) {
+
+                otherPoint.classList.remove("active");
+
+            }
+
+        });
+
+
+        /*
+        Open / close this box
+        */
+
+        point.classList.toggle("active");
+
+    });
+
+});
+
+
+/*
+Close the box if the user taps somewhere
+else on the page.
+*/
+
+document.addEventListener("click", function() {
+
+    points.forEach(point => {
+
+        point.classList.remove("active");
+
+    });
+
+});
+
+</script>
 
 
 </body>
