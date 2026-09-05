@@ -369,12 +369,12 @@ body {
      ===================================== -->
 
 <div
-    class="map-point position-default"
+    class="map-point position-Left"
     style="
         left: 84%;
         top: 50%;
 
-        --box-width: 40%;
+        --box-width: 30%;
         --box-scale: 0.4;
 
         --text-size: 1%;
@@ -595,6 +595,24 @@ function positionBoxes() {
             box.style.right = "20px";
 
             box.style.top = "20px";
+
+            box.style.transform = "none";
+
+        }
+        
+        /*
+        LEFT
+        */
+        
+        if (
+            point.classList.contains(
+                "position-Left"
+            )
+        ) {
+
+            box.style.right = "25px";
+
+            box.style.top = "-100px";
 
             box.style.transform = "none";
 
