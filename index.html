@@ -60,20 +60,24 @@ body {
     cursor: pointer;
 
     z-index: 10;
+    
 }
-
+.map-point:hover,
+.map-point.active {
+    z-index: 1000;
+}
 
 /* =========================================
    RED DOT
    ========================================= */
 
 .marker {
-    width: 20px;
-    height: 20px;
+    width: 12px;
+    height: 12px;
 
     background: red;
 
-    border: 3px solid white;
+    border: 2px solid white;
 
     border-radius: 50%;
 
@@ -250,14 +254,14 @@ body {
 <div
     class="map-point position-default"
     style="
-        left: 30%;
-        top: 30%;
+        left: 86%;
+        top: 43.6%;
 
         --box-width: 25%;
-        --box-scale: 1;
+        --box-scale: 0.2;
 
-        --text-size: 1.2%;
-        --text-scale: 0.7;
+        --text-size: 1%;
+        --text-scale: 0.6;
 
         --title-size: 1.7%;
     "
@@ -268,24 +272,11 @@ body {
 
     <div class="description">
 
-        <h2>Location One</h2>
+        <h2>Korea</h2>
 
         <p>
-            This is the description for Location One.
-            You can put whatever information you want here.
+            In Korea, the Mid‑Autumn Festival is called Chuseok, rooted in ancient harvest and thanksgiving traditions. It is one of Korea’s most important traditional holidays. During Chuseok, people return to their hometowns to reunite with family, perform ancestral rites, and visit graves. Traditional foods are pepared, with songpyeon (rice cakes) being the most representative. Unlike China’s mooncakes, songpyeon is the iconic festive food of Chuseok.
         </p>
-
-        <img
-            src="castle.jpg"
-            alt="Castle"
-        >
-
-        <a
-            href="https://example.com"
-            target="_blank"
-        >
-            Learn More
-        </a>
 
     </div>
 
@@ -335,8 +326,8 @@ body {
 <div
     class="map-point position-default"
     style="
-        left: 88%;
-        top: 42%;
+        left: 89%;
+        top: 43%;
 
         --box-width: 25%;
         --box-scale: 0.2;
@@ -399,6 +390,110 @@ body {
 
 </div>
 
+<!-- =====================================
+     LOCATION 5
+     ===================================== -->
+
+<div
+    class="map-point position-default"
+    style="
+        left: 80.5%;
+        top: 55%;
+
+        --box-width: 25%;
+        --box-scale: 0.2;
+
+        --text-size: 1%;
+        --text-scale: 0.6;
+
+        --title-size: 1.7%;
+    "
+>
+
+    <div class="marker"></div>
+
+
+    <div class="description">
+
+        <h2>Vietnam</h2>
+
+        <p>
+            Vietnam’s Mid‑Autumn Festival, Tết Trung Thu, was influenced by Chinese traditions but developed into a festival centered on children. Streets and markets are filled with lanterns and toys, and children parade with lanterns, admire the moon, and enjoy lion dances or lantern competitions. Adults eat mooncakes and admire the moon, so the festival is often regarded as a children’s holiday.
+        </p>
+
+    </div>
+
+</div>
+
+<!-- =====================================
+     LOCATION 6
+     ===================================== -->
+
+<div
+    class="map-point position-default"
+    style="
+        left: 79.3%;
+        top: 62.3%;
+
+        --box-width: 25%;
+        --box-scale: 0.2;
+
+        --text-size: 1%;
+        --text-scale: 0.6;
+
+        --title-size: 1.7%;
+    "
+>
+
+    <div class="marker"></div>
+
+
+    <div class="description">
+
+        <h2>Singapore</h2>
+
+        <p>
+            In Singapore, the Mid‑Autumn Festival is mainly preserved by the Chinese community, originating from moon worship and reunion traditions. The National Heritage Board notes its roots in ancient harvest thanksgiving. Today, it is celebrated by families and communities with mooncakes, pomelos, tea, moon‑viewing, and lanterns. Communities host lantern fairs, riddles, and performances, with festive decorations in places like Chinatown.
+        </p>
+
+    </div>
+
+</div>
+
+<!-- =====================================
+     LOCATION 7
+     ===================================== -->
+
+<div
+    class="map-point position-default"
+    style="
+        left: 78.7%;
+        top: 60.5%;
+
+        --box-width: 25%;
+        --box-scale: 0.2;
+
+        --text-size: 1%;
+        --text-scale: 0.6;
+
+        --title-size: 1.7%;
+    "
+>
+
+    <div class="marker"></div>
+
+
+    <div class="description">
+
+        <h2>Malaysia</h2>
+
+        <p>
+            Malaysia’s Mid‑Autumn Festival is passed down through the Chinese community, retaining traditions of moon‑viewing, eating mooncakes, and carrying lanterns. During the festival, malls and communities often hold lantern activities, dragon and lion dances, lantern parades, and float processions, blending traditional culture with modern community celebrations.
+        </p>
+
+    </div>
+
+</div>
 
 </div>
 
