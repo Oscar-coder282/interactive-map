@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Interactive Map</title>
+
+<style>
+
+/* =========================================
+   GENERAL PAGE
+   ========================================= */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+
+    font-family: Arial, sans-serif;
+
+    background: transparent;
+}
+
+
+/* =========================================
+   MAP CONTAINER
+   ========================================= */
+
+.map-container {
+    position: relative;
+
+    width: 100%;
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    overflow: visible;
+}
+
+
+/* =========================================
+   MAP IMAGE
+   ========================================= */
+
+.map-image {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    user-select: none;
+}
+
+
+/* =========================================
+   HOVER POINT
+   ========================================= */
+
+.map-point {
+    position: absolute;
+
+    width: 32px;
+    height: 32px;
+
+    transform: translate(-50%, -50%);
+
+    cursor: pointer;
+
+    z-index: 5;
+}
+
+
+/* =========================================
+   MARKER
+   ========================================= */
+
+.marker {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 18px;
+    height: 18px;
+
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background: #ff3b30;
+
+    border: 3px solid white;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.35);
+
+    transition:
+        transform 0.2s ease,
+        width 0.2s ease,
+        height 0.2s ease;
+}
+
+
+/* Marker gets bigger when hovering */
+
+.map-point:hover .marker {
+    width: 23px;
+    height: 23px;
+
+    transform: translate(-50%, -50%);
+}
+
+
+/* =========================================
+   DESCRIPTION BOX
+   ========================================= */
+
+.description {
+    position: absolute;
+
+    left: 25px;
+    bottom: 25px;
+
+    width: 260px;
+
+    padding: 16px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 6px 25px rgba(0,0,0,0.25);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+        translateY(8px)
+        scale(0.96);
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s ease;
+
+    pointer-events: none;
+
+    z-index: 20;
+
+    box-sizing: border-box;
+}
+
+
+/* Show description */
+
+.map-point:hover .description {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* =========================================
+   DESCRIPTION TITLE
+   ========================================= */
+
+.description h2 {
+    margin: 0 0 8px 0;
+
+    font-size: 20px;
+
+    line-height: 1.2;
+
+    color: #222;
+}
+
+
+/* =========================================
+   DESCRIPTION TEXT
+   ========================================= */
+
+.description p {
+    margin: 0;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    color: #555;
+}
+
+
+/* =========================================
+   DESCRIPTION IMAGE
+   ========================================= */
+
+.description img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    margin-bottom: 12px;
+
+    border-radius: 8px;
+}
+
+
+/* =========================================
+   LINK
+   ========================================= */
+
+.description a {
+    display: inline-block;
+
+    margin-top: 12px;
+
+    color: #0066cc;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+
+.description a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    .description {
+        width: 220px;
+
+        left: 20px;
+        bottom: 20px;
+
+        padding: 12px;
+    }
+
+    .description h2 {
+        font-size: 17px;
+    }
+
+    .description p {
+        font-size: 13px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     MAP
+     ========================================= -->
+
+<div class="map-container">
+
+
+    <!--
+        CHANGE THIS TO YOUR MAP IMAGE.
+
+        Example:
+
+        <img src="map.jpg">
+
+        Your map image should be in the
+        same folder as this HTML file.
+    -->
+
+    <img
+        src="unnamed.png"
+        alt="Interactive Map"
+        class="map-image"
+    >
+
+
+    <!-- =====================================
+         POINT 1
+         ===================================== -->
+
+    <!--
+        CHANGE THESE:
+
+        left = horizontal position
+        top  = vertical position
+
+        Example:
+
+        left: 30%;
+        top: 40%;
+    -->
+
+    <div
+        class="map-point"
+        style="left: 30%; top: 40%;"
+    >
+
+        <!-- Marker -->
+
+        <div class="marker"></div>
+
+
+        <!-- Description -->
+
+        <div class="description">
+
+            <!-- Optional image -->
+
+            <img
+                src="castle.jpg"
+                alt="Castle"
+            >
+
+            <h2>The Castle</h2>
+
+            <p>
+                This castle was built in 1452
+                and served as an important
+                defensive structure.
+            </p>
+
+            <a
+                href="https://example.com"
+                target="_blank"
+            >
+                Learn More
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         POINT 2
+         ===================================== -->
+
+    <div
+        class="map-point"
+        style="left: 65%; top: 30%;"
+    >
+
+        <div class="marker"></div>
+
+        <div class="description">
+
+            <img
+                src="church.jpg"
+                alt="Church"
+            >
+
+            <h2>The Church</h2>
+
+            <p>
+                The church was constructed
+                during the 18th century and
+                remains one of the area's
+                most important landmarks.
+            </p>
+
+            <a
+                href="https://example.com"
+                target="_blank"
+            >
+                Learn More
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         POINT 3
+         ===================================== -->
+
+    <div
+        class="map-point"
+        style="left: 45%; top: 70%;"
+    >
+
+        <div class="marker"></div>
+
+        <div class="description">
+
+            <img
+                src="library.jpg"
+                alt="Library"
+            >
+
+            <h2>The Library</h2>
+
+            <p>
+                Established in 1924, the library
+                contains thousands of historical
+                documents and books.
+            </p>
+
+            <a
+                href="https://example.com"
+                target="_blank"
+            >
+                Learn More
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         POINT 4
+         ===================================== -->
+
+    <div
+        class="map-point"
+        style="left: 80%; top: 65%;"
+    >
+
+        <div class="marker"></div>
+
+        <div class="description">
+
+            <h2>Another Location</h2>
+
+            <p>
+                Put your custom description
+                for this location here.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+</body>
+</html>
