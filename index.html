@@ -22,6 +22,10 @@ body {
 }
 
 
+/* =========================================
+   MAP
+   ========================================= */
+
 .map-container {
     position: relative;
     width: 100%;
@@ -30,12 +34,20 @@ body {
 }
 
 
+/* =========================================
+   PNG MAP
+   ========================================= */
+
 .map-image {
     display: block;
     width: 100%;
     height: auto;
 }
 
+
+/* =========================================
+   MAP POINT
+   ========================================= */
 
 .map-point {
     position: absolute;
@@ -50,6 +62,10 @@ body {
     z-index: 10;
 }
 
+
+/* =========================================
+   RED DOT
+   ========================================= */
 
 .marker {
     width: 20px;
@@ -69,6 +85,10 @@ body {
     left: 5px;
 }
 
+
+/* =========================================
+   DESCRIPTION BOX
+   ========================================= */
 
 .description {
 
@@ -93,6 +113,10 @@ body {
 }
 
 
+/* =========================================
+   DESKTOP HOVER
+   ========================================= */
+
 @media (hover: hover) {
 
     .map-point:hover .description {
@@ -102,10 +126,18 @@ body {
 }
 
 
+/* =========================================
+   PHONE TAP
+   ========================================= */
+
 .map-point.active .description {
     display: block;
 }
 
+
+/* =========================================
+   DESCRIPTION TITLE
+   ========================================= */
 
 .description h2 {
 
@@ -113,6 +145,10 @@ body {
 
 }
 
+
+/* =========================================
+   DESCRIPTION TEXT
+   ========================================= */
 
 .description p {
 
@@ -122,6 +158,10 @@ body {
 
 }
 
+
+/* =========================================
+   DESCRIPTION IMAGE
+   ========================================= */
 
 .description img {
 
@@ -135,6 +175,10 @@ body {
 
 }
 
+
+/* =========================================
+   LINK
+   ========================================= */
 
 .description a {
 
@@ -156,6 +200,10 @@ body {
 }
 
 
+/* =========================================
+   MOBILE
+   ========================================= */
+
 @media (max-width: 600px) {
 
     body {
@@ -164,6 +212,10 @@ body {
 
 }
 
+
+/* =========================================
+   VERY SMALL PHONE
+   ========================================= */
 
 @media (max-width: 400px) {
 
@@ -200,10 +252,14 @@ body {
     style="
         left: 30%;
         top: 30%;
+
         --box-width: 25%;
+        --box-scale: 1;
+
         --text-size: 1.2%;
-        --title-size: 1.7%;
         --text-scale: 0.7;
+
+        --title-size: 1.7%;
     "
 >
 
@@ -245,10 +301,14 @@ body {
     style="
         left: 80%;
         top: 45%;
+
         --box-width: 25%;
-        --text-size: 1.2%;
-        --title-size: 1.7%;
+        --box-scale: 0.5;
+
+        --text-size: 1%;
         --text-scale: 0.8;
+
+        --title-size: 1.7%;
     "
 >
 
@@ -277,10 +337,14 @@ body {
     style="
         left: 85%;
         top: 80%;
+
         --box-width: 30%;
+        --box-scale: 1;
+
         --text-size: 1.2%;
-        --title-size: 1.7%;
         --text-scale: 0.7;
+
+        --title-size: 1.7%;
     "
 >
 
@@ -315,10 +379,14 @@ body {
     style="
         left: 50%;
         top: 85%;
+
         --box-width: 22%;
+        --box-scale: 1;
+
         --text-size: 1.2%;
-        --title-size: 1.7%;
         --text-scale: 0.7;
+
+        --title-size: 1.7%;
     "
 >
 
@@ -348,6 +416,10 @@ const map = document.getElementById("map");
 const points = document.querySelectorAll(".map-point");
 
 
+/* =========================================
+   POSITION + SCALE BOXES
+   ========================================= */
+
 function positionBoxes() {
 
     const mapWidth = map.clientWidth;
@@ -359,6 +431,10 @@ function positionBoxes() {
             point.querySelector(".description");
 
 
+        /* =====================================
+           SETTINGS
+           ===================================== */
+
         const boxWidthPercent =
             parseFloat(
                 getComputedStyle(point)
@@ -366,17 +442,17 @@ function positionBoxes() {
             );
 
 
+        const boxScale =
+            parseFloat(
+                getComputedStyle(point)
+                .getPropertyValue("--box-scale")
+            ) || 1;
+
+
         const textSizePercent =
             parseFloat(
                 getComputedStyle(point)
                 .getPropertyValue("--text-size")
-            );
-
-
-        const titleSizePercent =
-            parseFloat(
-                getComputedStyle(point)
-                .getPropertyValue("--title-size")
             );
 
 
@@ -387,15 +463,31 @@ function positionBoxes() {
             ) || 1;
 
 
+        const titleSizePercent =
+            parseFloat(
+                getComputedStyle(point)
+                .getPropertyValue("--title-size")
+            );
+
+
         /* =====================================
            BOX WIDTH
            ===================================== */
 
         if (boxWidthPercent) {
 
-            const boxWidth =
-                mapWidth *
+            const referenceMapWidth = 1200;
+
+            const originalBoxWidth =
+                referenceMapWidth *
                 (boxWidthPercent / 100);
+
+            const mapRatio =
+                mapWidth / referenceMapWidth;
+
+            const boxWidth =
+                originalBoxWidth *
+                (1 + (mapRatio - 1) * boxScale);
 
             box.style.width =
                 boxWidth + "px";
@@ -404,15 +496,35 @@ function positionBoxes() {
 
 
         /* =====================================
+           BOX PADDING
+           ALSO SCALES WITH BOX
+           ===================================== */
+
+        const padding =
+            15 * boxScale;
+
+        box.style.padding =
+            padding + "px";
+
+
+        /* =====================================
            TEXT SIZE
            ===================================== */
 
         if (textSizePercent) {
 
+            const referenceMapWidth = 1200;
+
+            const originalTextSize =
+                referenceMapWidth *
+                (textSizePercent / 100);
+
+            const mapRatio =
+                mapWidth / referenceMapWidth;
+
             const textSize =
-                mapWidth *
-                (textSizePercent / 100) *
-                textScale;
+                originalTextSize *
+                (1 + (mapRatio - 1) * textScale);
 
             box.style.fontSize =
                 textSize + "px";
@@ -433,10 +545,18 @@ function positionBoxes() {
             titleSizePercent
         ) {
 
+            const referenceMapWidth = 1200;
+
+            const originalTitleSize =
+                referenceMapWidth *
+                (titleSizePercent / 100);
+
+            const mapRatio =
+                mapWidth / referenceMapWidth;
+
             const titleSize =
-                mapWidth *
-                (titleSizePercent / 100) *
-                textScale;
+                originalTitleSize *
+                (1 + (mapRatio - 1) * textScale);
 
             title.style.fontSize =
                 titleSize + "px";
@@ -447,6 +567,13 @@ function positionBoxes() {
         /* =====================================
            POSITION
            ===================================== */
+
+
+        /* -------------------------------------
+           DEFAULT
+
+           BELOW + RIGHT
+           ------------------------------------- */
 
         if (
             point.classList.contains(
@@ -463,6 +590,12 @@ function positionBoxes() {
         }
 
 
+        /* -------------------------------------
+           RIGHT
+
+           BELOW + LEFT
+           ------------------------------------- */
+
         if (
             point.classList.contains(
                 "position-right"
@@ -471,6 +604,7 @@ function positionBoxes() {
 
             const boxWidth =
                 box.offsetWidth;
+
 
             box.style.left =
                 (-boxWidth + 15) + "px";
@@ -481,6 +615,12 @@ function positionBoxes() {
 
         }
 
+
+        /* -------------------------------------
+           BOTTOM
+
+           ABOVE + RIGHT
+           ------------------------------------- */
 
         if (
             point.classList.contains(
@@ -498,6 +638,12 @@ function positionBoxes() {
         }
 
 
+        /* -------------------------------------
+           BOTTOM-RIGHT
+
+           ABOVE + LEFT
+           ------------------------------------- */
+
         if (
             point.classList.contains(
                 "position-bottom-right"
@@ -506,6 +652,7 @@ function positionBoxes() {
 
             const boxWidth =
                 box.offsetWidth;
+
 
             box.style.left =
                 (-boxWidth + 15) + "px";
@@ -552,7 +699,9 @@ points.forEach(point => {
             );
 
 
-            point.classList.toggle("active");
+            point.classList.toggle(
+                "active"
+            );
 
         }
     );
@@ -570,7 +719,9 @@ document.addEventListener(
 
         points.forEach(point => {
 
-            point.classList.remove("active");
+            point.classList.remove(
+                "active"
+            );
 
         });
 
@@ -579,7 +730,7 @@ document.addEventListener(
 
 
 /* =========================================
-   RESIZE
+   LOAD
    ========================================= */
 
 window.addEventListener(
@@ -587,6 +738,10 @@ window.addEventListener(
     positionBoxes
 );
 
+
+/* =========================================
+   RESIZE
+   ========================================= */
 
 window.addEventListener(
     "resize",
