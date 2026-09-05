@@ -14,11 +14,16 @@
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
-    padding: 20px;
+    padding: 0;
     background: #f5f5f5;
     font-family: Arial, sans-serif;
+}
+
+body {
+    padding: 20px;
 }
 
 
@@ -110,9 +115,7 @@ body {
 
     z-index: 100;
 
-    font-size: 14px;
-
-    line-height: 1.5;
+    overflow-wrap: break-word;
 }
 
 
@@ -134,7 +137,7 @@ body {
 
 
 /* =========================================
-   BOX POSITION OPTIONS
+   BOX POSITIONS
    ========================================= */
 
 .position-default .description {
@@ -170,7 +173,7 @@ body {
 
 
 /* =========================================
-   TITLE
+   DESCRIPTION TITLE
    ========================================= */
 
 .description h2 {
@@ -183,7 +186,7 @@ body {
 
 
 /* =========================================
-   TEXT
+   DESCRIPTION TEXT
    ========================================= */
 
 .description p {
@@ -198,7 +201,7 @@ body {
 
 
 /* =========================================
-   IMAGE
+   DESCRIPTION IMAGE
    ========================================= */
 
 .description img {
@@ -230,7 +233,6 @@ body {
 
 }
 
-
 .description a:hover {
 
     text-decoration: underline;
@@ -239,48 +241,7 @@ body {
 
 
 /* =========================================
-   TABLET
-   ========================================= */
-
-@media (max-width: 900px) {
-
-    body {
-        padding: 10px;
-    }
-
-    .description {
-
-        padding: 12px;
-
-        font-size: 12px;
-
-    }
-
-    .description h2 {
-
-        font-size: 17px;
-
-    }
-
-    .description p {
-
-        font-size: 12px;
-
-        line-height: 1.4;
-
-    }
-
-    .description a {
-
-        font-size: 12px;
-
-    }
-
-}
-
-
-/* =========================================
-   PHONE
+   NORMAL RESPONSIVE SETTINGS
    ========================================= */
 
 @media (max-width: 600px) {
@@ -289,85 +250,17 @@ body {
         padding: 5px;
     }
 
-    .description {
-
-        width: min(var(--box-width, 260px), calc(100vw - 20px));
-
-        max-width: calc(100vw - 20px);
-
-        padding: 10px;
-
-        font-size: 11px;
-
-    }
-
-    .description h2 {
-
-        font-size: 15px;
-
-        margin-bottom: 5px;
-
-    }
-
-    .description p {
-
-        font-size: 11px;
-
-        line-height: 1.3;
-
-        margin-bottom: 6px;
-
-    }
-
-    .description a {
-
-        font-size: 11px;
-
-        margin-top: 6px;
-
-    }
-
 }
 
 
 /* =========================================
-   VERY SMALL PHONE
+   SMALL PHONE
    ========================================= */
 
 @media (max-width: 400px) {
 
     body {
         padding: 3px;
-    }
-
-    .description {
-
-        width: min(var(--box-width, 240px), calc(100vw - 16px));
-
-        max-width: calc(100vw - 16px);
-
-        padding: 8px;
-
-    }
-
-    .description h2 {
-
-        font-size: 14px;
-
-    }
-
-    .description p {
-
-        font-size: 10px;
-
-        line-height: 1.25;
-
-    }
-
-    .description a {
-
-        font-size: 10px;
-
     }
 
 }
@@ -383,126 +276,130 @@ body {
 <div class="map-container">
 
 
-<img
-    src="unnamed.png"
-    alt="Interactive Map"
-    class="map-image"
->
+    <!-- =====================================
+         MAP
+         ===================================== -->
+
+    <img
+        src="unnamed.png"
+        alt="Interactive Map"
+        class="map-image"
+    >
 
 
-<!-- =====================================
-     LOCATION 1
-     ===================================== -->
+    <!-- =====================================
+         LOCATION 1
+         ===================================== -->
 
-<div
-    class="map-point position-default"
-    style="left: 30%; top: 30%; --box-width: 300px;"
->
+    <div
+        class="map-point position-default"
+        style="left: 30%; top: 30%; --box-width: 300px;"
+    >
 
-    <div class="marker"></div>
+        <div class="marker"></div>
 
-    <div class="description">
+        <div class="description">
 
-        <h2>Location One</h2>
+            <h2>Location One</h2>
 
-        <p>
-            This is the description for Location One.
-            You can put whatever information you want here.
-        </p>
+            <p>
+                This is the description for Location One.
+                You can put whatever information you want here.
+            </p>
 
-        <img
-            src="castle.jpg"
-            alt="Castle"
-        >
+            <img
+                src="castle.jpg"
+                alt="Castle"
+            >
 
-        <a
-            href="https://example.com"
-            target="_blank"
-        >
-            Learn More
-        </a>
+            <a
+                href="https://example.com"
+                target="_blank"
+            >
+                Learn More
+            </a>
 
-    </div>
-
-</div>
-
-
-<!-- =====================================
-     LOCATION 2
-     ===================================== -->
-
-<div
-    class="map-point position-right"
-    style="left: 80%; top: 45%; --box-width: 300px;"
->
-
-    <div class="marker"></div>
-
-    <div class="description">
-
-        <h2>China</h2>
-
-        <p>
-            The history of the Mid-Autumn Festival in China is linked to ancient moon-worship and harvest customs. Early traditions included autumn moon sacrifices, and by the Tang and Song dynasties, moon-viewing became an important festive activity. In the Northern Song, it developed into a formal festival. Today, the Mid-Autumn Festival emphasizes “reunion,” with families gathering to admire the moon, eat mooncakes, and sometimes engage in rituals such as moon worship and lantern displays.
-        </p>
+        </div>
 
     </div>
 
-</div>
 
+    <!-- =====================================
+         LOCATION 2
+         ===================================== -->
 
-<!-- =====================================
-     LOCATION 3
-     ===================================== -->
+    <div
+        class="map-point position-right"
+        style="left: 80%; top: 45%; --box-width: 300px;"
+    >
 
-<div
-    class="map-point position-bottom-right"
-    style="left: 85%; top: 80%; --box-width: 350px;"
->
+        <div class="marker"></div>
 
-    <div class="marker"></div>
+        <div class="description">
 
-    <div class="description">
+            <h2>China</h2>
 
-        <h2>Location Three</h2>
+            <p>
+                The history of the Mid-Autumn Festival in China is linked to ancient moon-worship and harvest customs. Early traditions included autumn moon sacrifices, and by the Tang and Song dynasties, moon-viewing became an important festive activity. In the Northern Song, it developed into a formal festival. Today, the Mid-Autumn Festival emphasizes “reunion,” with families gathering to admire the moon, eat mooncakes, and sometimes engage in rituals such as moon worship and lantern displays.
+            </p>
 
-        <p>
-            This location is close to the edge
-            of the map.
-        </p>
-
-        <img
-            src="library.jpg"
-            alt="Library"
-        >
+        </div>
 
     </div>
 
-</div>
 
+    <!-- =====================================
+         LOCATION 3
+         ===================================== -->
 
-<!-- =====================================
-     LOCATION 4
-     ===================================== -->
+    <div
+        class="map-point position-bottom-right"
+        style="left: 85%; top: 80%; --box-width: 350px;"
+    >
 
-<div
-    class="map-point position-bottom"
-    style="left: 50%; top: 85%; --box-width: 250px;"
->
+        <div class="marker"></div>
 
-    <div class="marker"></div>
+        <div class="description">
 
-    <div class="description">
+            <h2>Location Three</h2>
 
-        <h2>Location Four</h2>
+            <p>
+                This location is close to the edge
+                of the map.
+            </p>
 
-        <p>
-            This is another location on the map.
-        </p>
+            <img
+                src="library.jpg"
+                alt="Library"
+            >
+
+        </div>
 
     </div>
 
-</div>
+
+    <!-- =====================================
+         LOCATION 4
+         ===================================== -->
+
+    <div
+        class="map-point position-bottom"
+        style="left: 50%; top: 85%; --box-width: 250px;"
+    >
+
+        <div class="marker"></div>
+
+        <div class="description">
+
+            <h2>Location Four</h2>
+
+            <p>
+                This is another location on the map.
+            </p>
+
+        </div>
+
+    </div>
 
 
 </div>
@@ -551,27 +448,62 @@ document.addEventListener("click", function() {
 
 
 /* =========================================
-   MOBILE GOOGLE SITES FIX
+   GOOGLE SITES SCALE FIX
    ========================================= */
 
-function adjustForMobile() {
+function fixGoogleSitesScale() {
 
-    const visualWidth =
-        window.visualViewport
-        ? window.visualViewport.width
-        : window.innerWidth;
+    const map = document.querySelector(".map-container");
 
     const descriptions =
         document.querySelectorAll(".description");
 
+    if (!map || !descriptions.length) {
+        return;
+    }
+
+
     /*
-       Normal desktop
+       The map's actual CSS width.
     */
 
-    if (visualWidth > 700) {
+    const cssWidth = map.offsetWidth;
+
+
+    /*
+       The map's actual displayed width.
+
+       This detects scaling caused by
+       Google Sites / the iframe.
+    */
+
+    const displayedWidth =
+        map.getBoundingClientRect().width;
+
+
+    if (!cssWidth || !displayedWidth) {
+        return;
+    }
+
+
+    /*
+       Calculate the scale being applied.
+    */
+
+    const scale =
+        displayedWidth / cssWidth;
+
+
+    /*
+       If there is basically no scaling,
+       return to the normal sizes.
+    */
+
+    if (scale > 0.95 && scale < 1.05) {
 
         descriptions.forEach(box => {
 
+            box.style.width = "";
             box.style.fontSize = "";
             box.style.lineHeight = "";
             box.style.padding = "";
@@ -579,77 +511,131 @@ function adjustForMobile() {
         });
 
         return;
-
     }
 
 
     /*
-       Tablet
-    */
+       These are the sizes we WANT the
+       visitor to see.
 
-    if (visualWidth > 500) {
-
-        descriptions.forEach(box => {
-
-            box.style.fontSize = "12px";
-            box.style.lineHeight = "1.4";
-            box.style.padding = "12px";
-
-        });
-
-        return;
-
-    }
-
-
-    /*
-       Phone
-    */
-
-    if (visualWidth > 350) {
-
-        descriptions.forEach(box => {
-
-            box.style.fontSize = "10px";
-            box.style.lineHeight = "1.3";
-            box.style.padding = "8px";
-
-        });
-
-        return;
-
-    }
-
-
-    /*
-       Small phone
+       We compensate for Google Sites'
+       scaling by dividing by the scale.
     */
 
     descriptions.forEach(box => {
 
-        box.style.fontSize = "9px";
-        box.style.lineHeight = "1.2";
-        box.style.padding = "7px";
+        const originalWidth =
+            parseFloat(
+                getComputedStyle(box).getPropertyValue("width")
+            );
+
+
+        if (!originalWidth) {
+            return;
+        }
+
+
+        /*
+           Keep the visual tooltip width
+           consistent with the standalone site.
+        */
+
+        box.style.width =
+            (originalWidth / scale) + "px";
+
+
+        /*
+           Adjust text so it doesn't become
+           huge when Google Sites scales
+           the iframe.
+        */
+
+        const desiredFontSize = 14;
+
+        box.style.fontSize =
+            (desiredFontSize / scale) + "px";
+
+
+        box.style.lineHeight = "1.5";
+
+
+        /*
+           Scale padding as well.
+        */
+
+        const desiredPadding = 15;
+
+        box.style.padding =
+            (desiredPadding / scale) + "px";
 
     });
 
 }
 
 
-adjustForMobile();
+/* =========================================
+   RUN WHEN PAGE LOADS
+   ========================================= */
+
+window.addEventListener(
+    "load",
+    fixGoogleSitesScale
+);
 
 
-window.addEventListener("resize", adjustForMobile);
+/* =========================================
+   RUN WHEN WINDOW CHANGES SIZE
+   ========================================= */
+
+window.addEventListener(
+    "resize",
+    fixGoogleSitesScale
+);
 
 
-if (window.visualViewport) {
+/* =========================================
+   RUN WHEN MAP SIZE CHANGES
+   ========================================= */
 
-    window.visualViewport.addEventListener(
-        "resize",
-        adjustForMobile
-    );
+if (typeof ResizeObserver !== "undefined") {
+
+    const map =
+        document.querySelector(".map-container");
+
+    const observer =
+        new ResizeObserver(function() {
+
+            fixGoogleSitesScale();
+
+        });
+
+    observer.observe(map);
 
 }
+
+
+/* =========================================
+   RUN AGAIN AFTER A SHORT DELAY
+
+   Google Sites sometimes finishes
+   resizing the iframe after the page
+   has already loaded.
+   ========================================= */
+
+setTimeout(
+    fixGoogleSitesScale,
+    300
+);
+
+setTimeout(
+    fixGoogleSitesScale,
+    1000
+);
+
+setTimeout(
+    fixGoogleSitesScale,
+    2000
+);
 
 </script>
 
