@@ -4,55 +4,235 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Interactive Map</title>
 
+
 <style>
+
+/* =========================================================
+   BASIC RESET
+   ========================================================= */
 
 * {
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
-    padding: 20px;
+    padding: 0;
+}
+
+body {
     background: #f5f5f5;
     font-family: Arial, sans-serif;
 }
 
 
-/* =========================================
-   MAP
-   ========================================= */
+/* =========================================================
+   MAP SHELL
+   Controls are attached to this, NOT the scrolling map.
+   ========================================================= */
+
+.map-shell {
+
+    position: relative;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   MAP VIEWPORT
+   This is the area that can move LEFT/RIGHT and UP/DOWN.
+   ========================================================= */
+
+.map-viewport {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 80vh;
+
+    min-height: 400px;
+
+    max-height: 900px;
+
+    overflow: auto;
+
+    -webkit-overflow-scrolling: touch;
+
+    overscroll-behavior: contain;
+
+    background: #f5f5f5;
+
+    touch-action: pan-x pan-y;
+
+    scrollbar-width: auto;
+}
+
+
+/* =========================================================
+   ZOOM CONTROLS
+   These stay in the same visible position.
+   They are OUTSIDE the scrolling viewport.
+   ========================================================= */
+
+.zoom-controls {
+
+    position: absolute;
+
+    top: 15px;
+
+    right: 15px;
+
+    z-index: 99999;
+
+    display: flex;
+
+    gap: 5px;
+
+    background: rgba(255,255,255,0.95);
+
+    padding: 5px;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 3px 12px rgba(0,0,0,0.25);
+}
+
+
+/* =========================================================
+   ZOOM BUTTONS
+   ========================================================= */
+
+.zoom-controls button {
+
+    width: 36px;
+
+    height: 36px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: white;
+
+    color: #222;
+
+    font-size: 21px;
+
+    font-family: Arial, sans-serif;
+
+    line-height: 36px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 1px 4px rgba(0,0,0,0.2);
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+.zoom-controls button:hover {
+
+    background: #eeeeee;
+}
+
+
+.zoom-controls button:active {
+
+    transform: scale(0.94);
+}
+
+
+/* =========================================================
+   RESET BUTTON
+   ========================================================= */
+
+#zoomReset {
+
+    width: 38px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   MAP STAGE
+   The stage becomes wider when zoomed.
+   Because the image keeps its aspect ratio, it also
+   becomes taller automatically.
+   ========================================================= */
+
+.map-stage {
+
+    position: relative;
+
+    width: 100%;
+
+    min-width: 100%;
+}
+
+
+/* =========================================================
+   MAP CONTAINER
+   ========================================================= */
 
 .map-container {
+
     position: relative;
+
     width: 100%;
-    max-width: 1200px;
-    margin: auto;
+
+    margin: 0 auto;
 }
 
 
-/* =========================================
-   PNG MAP
-   ========================================= */
+/* =========================================================
+   MAP IMAGE
+   ========================================================= */
 
 .map-image {
+
     display: block;
+
     width: 100%;
+
     height: auto;
+
+    user-select: none;
+
+    -webkit-user-drag: none;
+
+    pointer-events: none;
 }
 
 
-/* =========================================
+/* =========================================================
    MAP POINT
-   ========================================= */
+   Positions remain percentage based.
+   ========================================================= */
 
 .map-point {
+
     position: absolute;
 
     width: 30px;
+
     height: 30px;
 
     transform: translate(-50%, -50%);
@@ -60,20 +240,29 @@ body {
     cursor: pointer;
 
     z-index: 10;
-    
+
+    --dot-size: 12px;
+
+    --dot-position: 5px;
 }
+
+
 .map-point:hover,
 .map-point.active {
+
     z-index: 1000;
 }
 
-/* =========================================
+
+/* =========================================================
    RED DOT
-   ========================================= */
+   ========================================================= */
 
 .marker {
-    width: 12px;
-    height: 12px;
+
+    width: var(--dot-size);
+
+    height: var(--dot-size);
 
     background: red;
 
@@ -81,18 +270,20 @@ body {
 
     border-radius: 50%;
 
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    box-shadow:
+        0 2px 6px rgba(0,0,0,0.4);
 
     position: absolute;
 
-    top: 5px;
-    left: 5px;
+    top: var(--dot-position);
+
+    left: var(--dot-position);
 }
 
 
-/* =========================================
+/* =========================================================
    DESCRIPTION BOX
-   ========================================= */
+   ========================================================= */
 
 .description {
 
@@ -100,72 +291,77 @@ body {
 
     background: white;
 
-    padding: 15px;
+    padding: 20px;
 
     border-radius: 10px;
 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    box-shadow:
+        0 4px 15px rgba(0,0,0,0.3);
 
     display: none;
 
     text-align: left;
 
-    z-index: 100;
+    z-index: 2000;
 
     overflow-wrap: break-word;
 
+    word-wrap: break-word;
+
+    max-width: none;
+
+    line-height: 1.5;
 }
 
 
-/* =========================================
+/* =========================================================
    DESKTOP HOVER
-   ========================================= */
+   ========================================================= */
 
 @media (hover: hover) {
 
     .map-point:hover .description {
+
         display: block;
     }
-
 }
 
 
-/* =========================================
+/* =========================================================
    PHONE TAP
-   ========================================= */
+   ========================================================= */
 
 .map-point.active .description {
+
     display: block;
 }
 
 
-/* =========================================
+/* =========================================================
    DESCRIPTION TITLE
-   ========================================= */
+   ========================================================= */
 
 .description h2 {
 
     margin: 0 0 8px 0;
-
 }
 
 
-/* =========================================
+/* =========================================================
    DESCRIPTION TEXT
-   ========================================= */
+   ========================================================= */
 
 .description p {
 
     margin: 0 0 10px 0;
 
     line-height: 1.5;
-
 }
 
 
-/* =========================================
+/* =========================================================
    DESCRIPTION IMAGE
-   ========================================= */
+   ========================================================= */
 
 .description img {
 
@@ -176,13 +372,12 @@ body {
     border-radius: 6px;
 
     margin-top: 5px;
-
 }
 
 
-/* =========================================
-   LINK
-   ========================================= */
+/* =========================================================
+   LINKS
+   ========================================================= */
 
 .description a {
 
@@ -193,40 +388,104 @@ body {
     color: blue;
 
     text-decoration: none;
-
 }
 
 
 .description a:hover {
 
     text-decoration: underline;
-
 }
 
 
-/* =========================================
+/* =========================================================
    MOBILE
-   ========================================= */
+   ========================================================= */
 
 @media (max-width: 600px) {
 
-    body {
-        padding: 5px;
+    .map-viewport {
+
+        height: 75vh;
+
+        min-height: 350px;
     }
 
+
+    .zoom-controls {
+
+        top: 10px;
+
+        right: 10px;
+
+        gap: 4px;
+
+        padding: 4px;
+
+        border-radius: 7px;
+    }
+
+
+    .zoom-controls button {
+
+        width: 32px;
+
+        height: 32px;
+
+        line-height: 32px;
+
+        font-size: 19px;
+    }
+
+
+    #zoomReset {
+
+        width: 34px;
+
+        font-size: 12px;
+    }
 }
 
 
-/* =========================================
-   VERY SMALL PHONE
-   ========================================= */
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
 
 @media (max-width: 400px) {
 
-    body {
-        padding: 3px;
+    .map-viewport {
+
+        height: 72vh;
+
+        min-height: 320px;
     }
 
+
+    .zoom-controls {
+
+        top: 8px;
+
+        right: 8px;
+    }
+
+
+    .zoom-controls button {
+
+        width: 30px;
+
+        height: 30px;
+
+        line-height: 30px;
+
+        font-size: 18px;
+    }
+
+
+    #zoomReset {
+
+        width: 32px;
+
+        font-size: 11px;
+    }
 }
 
 </style>
@@ -237,655 +496,794 @@ body {
 <body>
 
 
-<div class="map-container" id="map">
+<!-- =========================================================
+     MAP SHELL
+     ========================================================= -->
+
+<div class="map-shell">
 
 
-<img
-    src="unnamed.png"
-    alt="Interactive Map"
-    class="map-image"
->
+    <!-- =====================================================
+         ZOOM CONTROLS
+         These do NOT move when the map is panned.
+         ===================================================== -->
+
+    <div class="zoom-controls">
+
+        <button
+            type="button"
+            id="zoomOut"
+            aria-label="Zoom out"
+        >
+            −
+        </button>
 
 
-<!-- =====================================
-     LOCATION 1
-     ===================================== -->
-
-<div
-    class="map-point position-default"
-    style="
-        left: 86%;
-        top: 43.6%;
-
-        --box-width: 25%;
-        --box-scale: 0.2;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
+        <button
+            type="button"
+            id="zoomReset"
+            aria-label="Reset zoom"
+        >
+            1×
+        </button>
 
 
-    <div class="description">
-
-        <h2>Korea</h2>
-
-        <p>
-            In Korea, the Mid‑Autumn Festival is called Chuseok, rooted in ancient harvest and thanksgiving traditions. It is one of Korea’s most important traditional holidays. During Chuseok, people return to their hometowns to reunite with family, perform ancestral rites, and visit graves. Traditional foods are pepared, with songpyeon (rice cakes) being the most representative. Unlike China’s mooncakes, songpyeon is the iconic festive food of Chuseok.
-        </p>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================
-     LOCATION 2
-     ===================================== -->
-
-<div
-    class="map-point position-default"
-    style="
-        left: 80%;
-        top: 45%;
-
-        --box-width: 25%;
-        --box-scale: 0.2;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>China</h2>
-
-        <p>
-            The history of the Mid-Autumn Festival in China is linked to ancient moon-worship and harvest customs. Early traditions included autumn moon sacrifices, and by the Tang and Song dynasties, moon-viewing became an important festive activity. In the Northern Song, it developed into a formal festival. Today, the Mid-Autumn Festival emphasizes “reunion,” with families gathering to admire the moon, eat mooncakes, and sometimes engage in rituals such as moon worship and lantern displays.
-        </p>
+        <button
+            type="button"
+            id="zoomIn"
+            aria-label="Zoom in"
+        >
+            +
+        </button>
 
     </div>
 
-</div>
+
+    <!-- =====================================================
+         SCROLLABLE MAP VIEWPORT
+         ===================================================== -->
+
+    <div
+        class="map-viewport"
+        id="mapViewport"
+    >
 
 
-<!-- =====================================
-     LOCATION 3
-     ===================================== -->
+        <!-- =================================================
+             MAP STAGE
+             ================================================= -->
 
-<div
-    class="map-point position-default"
-    style="
-        left: 89%;
-        top: 43%;
-
-        --box-width: 25%;
-        --box-scale: 0.2;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
+        <div
+            class="map-stage"
+            id="mapStage"
+        >
 
 
-    <div class="description">
+            <!-- =============================================
+                 MAP
+                 ============================================= -->
 
-        <h2>Japan</h2>
+            <div
+                class="map-container"
+                id="map"
+            >
 
-        <p>
-            Japan’s moon‑viewing culture was introduced from China over a thousand years ago and evolved into Jūgoya or “Mid‑Autumn Moon.” Japanese people admire the full moon in autumn and offer tsukimi dango (moon‑viewing dumplings), pampas grass, and seasonal crops to express gratitude for nature and the harvest. Compared to China, Japan emphasizes the act of moon‑viewing itself rather than eating mooncakes.
-        </p>
+
+                <img
+                    src="unnamed.png"
+                    alt="Interactive Map"
+                    class="map-image"
+                >
+
+
+                <!-- =========================================
+                     1. KOREA
+                     ========================================= -->
+
+                <div
+                    class="map-point position-default"
+                    style="
+                        left: 86%;
+                        top: 43.6%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.2;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Korea</h2>
+
+                        <p>
+                            In Korea, the Mid-Autumn Festival is called Chuseok, rooted in ancient harvest and thanksgiving traditions. It is one of Korea’s most important traditional holidays. During Chuseok, people return to their hometowns to reunite with family, perform ancestral rites, and visit graves. Traditional foods are pepared, with songpyeon (rice cakes) being the most representative. Unlike China’s mooncakes, songpyeon is the iconic festive food of Chuseok.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     2. CHINA
+                     ========================================= -->
+
+                <div
+                    class="map-point position-default"
+                    style="
+                        left: 80%;
+                        top: 45%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.2;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>China</h2>
+
+                        <p>
+                            The history of the Mid-Autumn Festival in China is linked to ancient moon-worship and harvest customs. Early traditions included autumn moon sacrifices, and by the Tang and Song dynasties, moon-viewing became an important festive activity. In the Northern Song, it developed into a formal festival. Today, the Mid-Autumn Festival emphasizes “reunion,” with families gathering to admire the moon, eat mooncakes, and sometimes engage in rituals such as moon worship and lantern displays.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     3. JAPAN
+                     ========================================= -->
+
+                <div
+                    class="map-point position-default"
+                    style="
+                        left: 89%;
+                        top: 43%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.2;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Japan</h2>
+
+                        <p>
+                            Japan’s moon-viewing culture was introduced from China over a thousand years ago and evolved into Jūgoya or “Mid-Autumn Moon.” Japanese people admire the full moon in autumn and offer tsukimi dango (moon-viewing dumplings), pampas grass, and seasonal crops to express gratitude for nature and the harvest. Compared to China, Japan emphasizes the act of moon-viewing itself rather than eating mooncakes.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     4. TAIWAN
+                     ========================================= -->
+
+                <div
+                    class="map-point position-Left"
+                    style="
+                        left: 84%;
+                        top: 50%;
+
+                        --box-width: 30%;
+                        --box-scale: 0.4;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Taiwan</h2>
+
+                        <p>
+                            The history of the Mid-Autumn Festival in Taiwan comes from traditional Chinese moon-worship and harvest customs brought by early Chinese settlers. Over time, the festival became an important occasion for families to gather, admire the full moon, and celebrate together. In modern Taiwan, traditions have developed to include eating mooncakes and pomelos, giving gifts, and especially barbecuing with family and friends, which became popular in the late 20th century. Today, the Mid-Autumn Festival in Taiwan combines traditional customs with modern celebrations, focusing on family reunion, food, and spending time together.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     5. VIETNAM
+                     ========================================= -->
+
+                <div
+                    class="map-point position-bottom-right"
+                    style="
+                        left: 80.5%;
+                        top: 55%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.2;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Vietnam</h2>
+
+                        <p>
+                            Vietnam’s Mid-Autumn Festival, Tết Trung Thu, was influenced by Chinese traditions but developed into a festival centered on children. Streets and markets are filled with lanterns and toys, and children parade with lanterns, admire the moon, and enjoy lion dances or lantern competitions. Adults eat mooncakes and admire the moon, so the festival is often regarded as a children’s holiday.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     6. SINGAPORE
+                     ========================================= -->
+
+                <div
+                    class="map-point position-bottom-right"
+                    style="
+                        left: 79.8%;
+                        top: 62.9%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.2;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Singapore</h2>
+
+                        <p>
+                            In Singapore, the Mid-Autumn Festival is mainly preserved by the Chinese community, originating from moon worship and reunion traditions. The National Heritage Board notes its roots in ancient harvest thanksgiving. Today, it is celebrated by families and communities with mooncakes, pomelos, tea, moon-viewing, and lanterns. Communities host lantern fairs, riddles, and performances, with festive decorations in places like Chinatown.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     7. MALAYSIA
+                     ========================================= -->
+
+                <div
+                    class="map-point position-bottom-right"
+                    style="
+                        left: 78%;
+                        top: 59%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.2;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Malaysia</h2>
+
+                        <p>
+                            Malaysia’s Mid-Autumn Festival is passed down through the Chinese community, retaining traditions of moon-viewing, eating mooncakes, and carrying lanterns. During the festival, malls and communities often hold lantern activities, dragon and lion dances, lantern parades, and float processions, blending traditional culture with modern community celebrations.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     8. PHILIPPINES
+                     ========================================= -->
+
+                <div
+                    class="map-point position-bottom-right"
+                    style="
+                        left: 85%;
+                        top: 57.5%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.2;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Philippines</h2>
+
+                        <p>
+                            In the Philippines, the Mid-Autumn Festival is mainly celebrated in Chinese communities, especially in Manila. Lanterns and colorful decorations are displayed, mooncakes are sold, and festivities include dragon dances, lantern parades, traditional costume parades, and floats, combining Chinese traditions with Filipino urban culture.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     9. INDONESIA
+                     ========================================= -->
+
+                <div
+                    class="map-point position-bottom-right"
+                    style="
+                        left: 84%;
+                        top: 66%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.2;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Indonesia</h2>
+
+                        <p>
+                            Indonesia’s Mid-Autumn Festival is preserved by the Chinese community, with celebrations similar to Chinese traditions. Families gather to eat, admire the moon, and enjoy mooncakes. Some communities also host lantern or cultural events, making the festival an important occasion for preserving Chinese heritage.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     10. PALE YELLOW COUNTRIES
+                     ========================================= -->
+
+                <div
+                    class="map-point position-left"
+                    style="
+                        left: 23%;
+                        top: 35%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.2;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Countries in Pale Yellow</h2>
+
+                        <p>
+                            Western countries generally do not have a nationwide Mid-Autumn Festival like those in East Asia. However, with the growth of Chinese, Korean, Vietnamese, and other Asian immigrant communities, public celebrations of the Mid-Autumn Festival have emerged in places such as the United States, Canada, the United Kingdom, and Australia.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     11. PALE YELLOW COUNTRIES
+                     ========================================= -->
+
+                <div
+                    class="map-point position-bottom-right"
+                    style="
+                        left: 88%;
+                        top: 77%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.2;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Countries in Pale Yellow</h2>
+
+                        <p>
+                            Western countries generally do not have a nationwide Mid-Autumn Festival like those in East Asia. However, with the growth of Chinese, Korean, Vietnamese, and other Asian immigrant communities, public celebrations of the Mid-Autumn Festival have emerged in places such as the United States, Canada, the United Kingdom, and Australia.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     12. PALE YELLOW COUNTRIES
+                     ========================================= -->
+
+                <div
+                    class="map-point position-left"
+                    style="
+                        left: 50%;
+                        top: 30%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.7;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Countries in Pale Yellow</h2>
+
+                        <p>
+                            Western countries generally do not have a nationwide Mid-Autumn Festival like those in East Asia. However, with the growth of Chinese, Korean, Vietnamese, and other Asian immigrant communities, public celebrations of the Mid-Autumn Festival have emerged in places such as the United States, Canada, the United Kingdom, and Australia.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     13. OTHER COUNTRIES
+                     ========================================= -->
+
+                <div
+                    class="map-point position-left"
+                    style="
+                        left: 50%;
+                        top: 50%;
+
+                        --box-width: 25%;
+                        --box-scale: 0.7;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>Other Countries</h2>
+
+                        <p>
+                            While most other countries lack an established Mid-Autumn Festival culture, our aim is to spread this tradition and encourage cultural exchange with local practices.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     14. INDIA
+                     ========================================= -->
+
+                <div
+                    class="map-point position-uLeft"
+                    style="
+                        left: 73%;
+                        top: 50%;
+
+                        --box-width: 30%;
+                        --box-scale: 0.4;
+
+                        --text-size: 1%;
+                        --text-scale: 0.6;
+
+                        --title-size: 1.7%;
+                    "
+                >
+
+                    <div class="marker"></div>
+
+                    <div class="description">
+
+                        <h2>India</h2>
+
+                        <p>
+                            Although India does not have a tradition of celebrating the Mid-Autumn Festival, its cultural foundations—emphasizing family reunion, gratitude for the autumn harvest, and rich mythological narratives—resonate closely with the spirit of the festival. India has many celebrations marking seasonal transitions and agricultural abundance, which align with the Mid-Autumn Festival’s origins in ancient harvest rituals and moon worship. Moreover, the moon god holds an important place in Indian mythology, allowing moon-viewing and legends such as Chang’e’s journey to the moon to easily strike a chord. This connection further reflects India’s cultural values of family cohesion, sharing sweets, and spreading joy. Therefore, we hope to introduce the Mid-Autumn Festival into India, preserving its traditional significance while fostering meaningful exchange and deep integration with local customs and celebrations.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
 
     </div>
-
-</div>
-
-
-<!-- =====================================
-     LOCATION 4
-     ===================================== -->
-
-<div
-    class="map-point position-Left"
-    style="
-        left: 84%;
-        top: 50%;
-
-        --box-width: 30%;
-        --box-scale: 0.4;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>Taiwan</h2>
-
-        <p>
-            The history of the Mid-Autumn Festival in Taiwan comes from traditional Chinese moon-worship and harvest customs brought by early Chinese settlers. Over time, the festival became an important occasion for families to gather, admire the full moon, and celebrate together. In modern Taiwan, traditions have developed to include eating mooncakes and pomelos, giving gifts, and especially barbecuing with family and friends, which became popular in the late 20th century. Today, the Mid-Autumn Festival in Taiwan combines traditional customs with modern celebrations, focusing on family reunion, food, and spending time together.
-        </p>
-
-    </div>
-
-</div>
-
-<!-- =====================================
-     LOCATION 5
-     ===================================== -->
-
-<div
-    class="map-point position-bottom-right"
-    style="
-        left: 80.5%;
-        top: 55%;
-
-        --box-width: 25%;
-        --box-scale: 0.2;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>Vietnam</h2>
-
-        <p>
-            Vietnam’s Mid‑Autumn Festival, Tết Trung Thu, was influenced by Chinese traditions but developed into a festival centered on children. Streets and markets are filled with lanterns and toys, and children parade with lanterns, admire the moon, and enjoy lion dances or lantern competitions. Adults eat mooncakes and admire the moon, so the festival is often regarded as a children’s holiday.
-        </p>
-
-    </div>
-
-</div>
-
-<!-- =====================================
-     LOCATION 6
-     ===================================== -->
-
-<div
-    class="map-point position-bottom-right"
-    style="
-        left: 79.8%;
-        top: 62.9%;
-
-        --box-width: 25%;
-        --box-scale: 0.2;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>Singapore</h2>
-
-        <p>
-            In Singapore, the Mid‑Autumn Festival is mainly preserved by the Chinese community, originating from moon worship and reunion traditions. The National Heritage Board notes its roots in ancient harvest thanksgiving. Today, it is celebrated by families and communities with mooncakes, pomelos, tea, moon‑viewing, and lanterns. Communities host lantern fairs, riddles, and performances, with festive decorations in places like Chinatown.
-        </p>
-
-    </div>
-
-</div>
-
-<!-- =====================================
-     LOCATION 7
-     ===================================== -->
-
-<div
-    class="map-point position-bottom-right"
-    style="
-        left: 78%;
-        top: 59%;
-
-        --box-width: 25%;
-        --box-scale: 0.2;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>Malaysia</h2>
-
-        <p>
-            Malaysia’s Mid‑Autumn Festival is passed down through the Chinese community, retaining traditions of moon‑viewing, eating mooncakes, and carrying lanterns. During the festival, malls and communities often hold lantern activities, dragon and lion dances, lantern parades, and float processions, blending traditional culture with modern community celebrations.
-        </p>
-
-    </div>
-
-</div>
-
-<!-- =====================================
-     LOCATION 8
-     ===================================== -->
-
-<div
-    class="map-point position-bottom-right"
-    style="
-        left: 85%;
-        top: 57.5%;
-
-        --box-width: 25%;
-        --box-scale: 0.2;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>Philippines</h2>
-
-        <p>
-            In the Philippines, the Mid‑Autumn Festival is mainly celebrated in Chinese communities, especially in Manila. Lanterns and colorful decorations are displayed, mooncakes are sold, and festivities include dragon dances, lantern parades, traditional costume parades, and floats, combining Chinese traditions with Filipino urban culture.
-        </p>
-
-    </div>
-
-</div>
-
-<!-- =====================================
-     LOCATION 9
-     ===================================== -->
-
-<div
-    class="map-point position-bottom-right"
-    style="
-        left: 84%;
-        top: 66%;
-
-        --box-width: 25%;
-        --box-scale: 0.2;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>Indonesia</h2>
-
-        <p>
-            Indonesia’s Mid‑Autumn Festival is preserved by the Chinese community, with celebrations similar to Chinese traditions. Families gather to eat, admire the moon, and enjoy mooncakes. Some communities also host lantern or cultural events, making the festival an important occasion for preserving Chinese heritage.
-        </p>
-
-    </div>
-
-</div>
-
-<!-- =====================================
-     LOCATION 10
-     ===================================== -->
-
-<div
-    class="map-point position-left"
-    style="
-        left: 23%;
-        top: 35%;
-
-        --box-width: 25%;
-        --box-scale: 0.2;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>Countries in Pale Yellow</h2>
-
-        <p>
-            Western countries generally do not have a nationwide Mid‑Autumn Festival like those in East Asia. However, with the growth of Chinese, Korean, Vietnamese, and other Asian immigrant communities, public celebrations of the Mid‑Autumn Festival have emerged in places such as the United States, Canada, the United Kingdom, and Australia.
-        </p>
-
-    </div>
-
-</div>
-
-<!-- =====================================
-     LOCATION 11
-     ===================================== -->
-
-<div
-    class="map-point position-bottom-right"
-    style="
-        left: 88%;
-        top: 77%;
-
-        --box-width: 25%;
-        --box-scale: 0.2;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>Countries in Pale Yellow</h2>
-
-        <p>
-            Western countries generally do not have a nationwide Mid‑Autumn Festival like those in East Asia. However, with the growth of Chinese, Korean, Vietnamese, and other Asian immigrant communities, public celebrations of the Mid‑Autumn Festival have emerged in places such as the United States, Canada, the United Kingdom, and Australia.
-        </p>
-
-    </div>
-
-</div>
-
-<!-- =====================================
-     LOCATION 12
-     ===================================== -->
-
-<div
-    class="map-point position-left"
-    style="
-        left: 50%;
-        top: 30%;
-
-        --box-width: 25%;
-        --box-scale: 0.7;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>Countries in Pale Yellow</h2>
-
-        <p>
-            Western countries generally do not have a nationwide Mid‑Autumn Festival like those in East Asia. However, with the growth of Chinese, Korean, Vietnamese, and other Asian immigrant communities, public celebrations of the Mid‑Autumn Festival have emerged in places such as the United States, Canada, the United Kingdom, and Australia.
-        </p>
-
-    </div>
-
-</div>
-
-<!-- =====================================
-     LOCATION 12
-     ===================================== -->
-
-<div
-    class="map-point position-left"
-    style="
-        left: 50%;
-        top: 50%;
-
-        --box-width: 25%;
-        --box-scale: 0.7;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>Other Countries</h2>
-
-        <p>
-            While most other countries lack an established Mid‑Autumn Festival culture, our aim is to spread this tradition and encourage cultural exchange with local practices.
-        </p>
-
-    </div>
-
-</div>
-
-<!-- =====================================
-     LOCATION 13
-     ===================================== -->
-
-<div
-    class="map-point position-uLeft"
-    style="
-        left: 73%;
-        top: 50%;
-
-        --box-width: 30%;
-        --box-scale: 0.4;
-
-        --text-size: 1%;
-        --text-scale: 0.6;
-
-        --title-size: 1.7%;
-    "
->
-
-    <div class="marker"></div>
-
-
-    <div class="description">
-
-        <h2>India</h2>
-
-        <p>
-            Although India does not have a tradition of celebrating the Mid‑Autumn Festival, its cultural foundations—emphasizing family reunion, gratitude for the autumn harvest, and rich mythological narratives—resonate closely with the spirit of the festival. India has many celebrations marking seasonal transitions and agricultural abundance, which align with the Mid‑Autumn Festival’s origins in ancient harvest rituals and moon worship. Moreover, the moon god holds an important place in Indian mythology, allowing moon‑viewing and legends such as Chang’e’s journey to the moon to easily strike a chord. This connection further reflects India’s cultural values of family cohesion, sharing sweets, and spreading joy. Therefore, we hope to introduce the Mid‑Autumn Festival into India, preserving its traditional significance while fostering meaningful exchange and deep integration with local customs and celebrations.
-        </p>
-
-    </div>
-
-</div>
 
 </div>
 
 
 <script>
 
-const map = document.getElementById("map");
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
 
-const points = document.querySelectorAll(".map-point");
+const viewport =
+    document.getElementById("mapViewport");
+
+const stage =
+    document.getElementById("mapStage");
+
+const map =
+    document.getElementById("map");
+
+const points =
+    document.querySelectorAll(".map-point");
+
+const zoomIn =
+    document.getElementById("zoomIn");
+
+const zoomOut =
+    document.getElementById("zoomOut");
+
+const zoomReset =
+    document.getElementById("zoomReset");
 
 
-/* =========================================
-   POSITION + SCALE BOXES
-   ========================================= */
+/* =========================================================
+   ZOOM SETTINGS
+   ========================================================= */
+
+let zoomLevel = 1;
+
+const minZoom = 1;
+
+const maxZoom = 4;
+
+const zoomStep = 0.5;
+
+
+/* =========================================================
+   POSITION DESCRIPTION BOXES
+   ========================================================= */
 
 function positionBoxes() {
 
-    const mapWidth = map.clientWidth;
+    const mapWidth =
+        map.clientWidth;
+
+    if (!mapWidth) {
+        return;
+    }
 
 
     points.forEach(point => {
 
         const box =
-            point.querySelector(".description");
+            point.querySelector(
+                ".description"
+            );
+
+        if (!box) {
+            return;
+        }
 
 
-        /* =====================================
-           SETTINGS
-           ===================================== */
+        const styles =
+            getComputedStyle(point);
+
 
         const boxWidthPercent =
             parseFloat(
-                getComputedStyle(point)
-                .getPropertyValue("--box-width")
+                styles.getPropertyValue(
+                    "--box-width"
+                )
             );
 
 
         const boxScale =
             parseFloat(
-                getComputedStyle(point)
-                .getPropertyValue("--box-scale")
+                styles.getPropertyValue(
+                    "--box-scale"
+                )
             ) || 1;
 
 
         const textSizePercent =
             parseFloat(
-                getComputedStyle(point)
-                .getPropertyValue("--text-size")
+                styles.getPropertyValue(
+                    "--text-size"
+                )
             );
 
 
         const textScale =
             parseFloat(
-                getComputedStyle(point)
-                .getPropertyValue("--text-scale")
+                styles.getPropertyValue(
+                    "--text-scale"
+                )
             ) || 1;
 
 
         const titleSizePercent =
             parseFloat(
-                getComputedStyle(point)
-                .getPropertyValue("--title-size")
+                styles.getPropertyValue(
+                    "--title-size"
+                )
             );
 
 
-        /* =====================================
+        const referenceMapWidth =
+            1200;
+
+
+        const mapRatio =
+            mapWidth /
+            referenceMapWidth;
+
+
+        /* =================================================
            BOX WIDTH
-           ===================================== */
+           ================================================= */
 
-        if (boxWidthPercent) {
-
-            const referenceMapWidth = 1200;
+        if (
+            !isNaN(
+                boxWidthPercent
+            )
+        ) {
 
             const originalBoxWidth =
                 referenceMapWidth *
-                (boxWidthPercent / 100);
+                (
+                    boxWidthPercent /
+                    100
+                );
 
-            const mapRatio =
-                mapWidth / referenceMapWidth;
 
             const boxWidth =
                 originalBoxWidth *
-                (1 + (mapRatio - 1) * boxScale);
+                (
+                    1 +
+                    (
+                        mapRatio - 1
+                    ) *
+                    boxScale
+                );
+
 
             box.style.width =
                 boxWidth + "px";
-
         }
 
 
-        /* =====================================
-           BOX PADDING
-           ALSO SCALES WITH BOX
-           ===================================== */
+        /* =================================================
+           PADDING
+           ================================================= */
 
-    /*    const padding =
-            25 * boxScale;
+        const paddingMultiplier =
+            1 +
+            (
+                mapRatio - 1
+            );
 
-        box.style.padding =
-            padding + "px";
-*/
-        const referenceMapWidth = 1200;
-
-        const paddingTop = 20;
-        const paddingRight = 20;
-        const paddingBottom = 10;
-        const paddingLeft = 20;
-
-        const paddingScale = 1;
-
-        const mapRatio =
-            mapWidth / referenceMapWidth;
 
         box.style.padding =
-            `${paddingTop * (1 + (mapRatio - 1) * paddingScale)}px
-            ${paddingRight * (1 + (mapRatio - 1) * paddingScale)}px
-            ${paddingBottom * (1 + (mapRatio - 1) * paddingScale)}px
-            ${paddingLeft * (1 + (mapRatio - 1) * paddingScale)}px`;
+            `${20 * paddingMultiplier}px
+             ${20 * paddingMultiplier}px
+             ${10 * paddingMultiplier}px
+             ${20 * paddingMultiplier}px`;
 
-        /* =====================================
+
+        /* =================================================
            TEXT SIZE
-           ===================================== */
+           ================================================= */
 
-        if (textSizePercent) {
-
-            const referenceMapWidth = 1200;
+        if (
+            !isNaN(
+                textSizePercent
+            )
+        ) {
 
             const originalTextSize =
                 referenceMapWidth *
-                (textSizePercent / 100);
+                (
+                    textSizePercent /
+                    100
+                );
 
-            const mapRatio =
-                mapWidth / referenceMapWidth;
 
             const textSize =
                 originalTextSize *
-                (1 + (mapRatio - 1) * textScale);
+                (
+                    1 +
+                    (
+                        mapRatio - 1
+                    ) *
+                    textScale
+                );
+
 
             box.style.fontSize =
                 textSize + "px";
-
         }
 
 
-        /* =====================================
+        /* =================================================
            TITLE SIZE
-           ===================================== */
+           ================================================= */
 
         const title =
             box.querySelector("h2");
@@ -893,38 +1291,54 @@ function positionBoxes() {
 
         if (
             title &&
-            titleSizePercent
+            !isNaN(
+                titleSizePercent
+            )
         ) {
-
-            const referenceMapWidth = 1200;
 
             const originalTitleSize =
                 referenceMapWidth *
-                (titleSizePercent / 100);
+                (
+                    titleSizePercent /
+                    100
+                );
 
-            const mapRatio =
-                mapWidth / referenceMapWidth;
 
             const titleSize =
                 originalTitleSize *
-                (1 + (mapRatio - 1) * textScale);
+                (
+                    1 +
+                    (
+                        mapRatio - 1
+                    ) *
+                    textScale
+                );
+
 
             title.style.fontSize =
                 titleSize + "px";
-
         }
 
 
-        /* =====================================
-           POSITION
-           ===================================== */
+        /* =================================================
+           RESET DESCRIPTION POSITION
+           ================================================= */
+
+        box.style.left = "";
+
+        box.style.right = "";
+
+        box.style.top = "";
+
+        box.style.bottom = "";
+
+        box.style.transform =
+            "none";
 
 
-        /* -------------------------------------
+        /* =================================================
            DEFAULT
-
-           BELOW + RIGHT
-           ------------------------------------- */
+           ================================================= */
 
         if (
             point.classList.contains(
@@ -932,64 +1346,103 @@ function positionBoxes() {
             )
         ) {
 
-            box.style.right = "20px";
+            box.style.right =
+                (
+                    20 *
+                    zoomLevel
+                ) +
+                "px";
 
-            box.style.top = "20px";
-
-            box.style.transform = "none";
-
+            box.style.top =
+                (
+                    20 *
+                    zoomLevel
+                ) +
+                "px";
         }
-        
-        /*
-        LEFT
-        */
-        
+
+
+        /* =================================================
+           UPPER RIGHT / LEFT CLASS
+           ================================================= */
+
         if (
             point.classList.contains(
                 "position-Left"
             )
         ) {
 
-            box.style.right = "25px";
+            box.style.right =
+                (
+                    25 *
+                    zoomLevel
+                ) +
+                "px";
 
-            box.style.top = "-30px";
-
-            box.style.transform = "none";
-
+            box.style.top =
+                (
+                    -30 *
+                    zoomLevel
+                ) +
+                "px";
         }
+
+
+        /* =================================================
+           UPPER LEFT
+           ================================================= */
+
         if (
             point.classList.contains(
                 "position-uLeft"
             )
         ) {
 
-            box.style.right = "25px";
+            box.style.right =
+                (
+                    25 *
+                    zoomLevel
+                ) +
+                "px";
 
-            box.style.top = "-90px";
-
-            box.style.transform = "none";
-
+            box.style.top =
+                (
+                    -90 *
+                    zoomLevel
+                ) +
+                "px";
         }
+
+
+        /* =================================================
+           LEFT
+           ================================================= */
+
         if (
             point.classList.contains(
                 "position-left"
             )
         ) {
 
-            box.style.left = "20px";
+            box.style.left =
+                (
+                    20 *
+                    zoomLevel
+                ) +
+                "px";
 
-            box.style.top = "20px";
-
-            box.style.transform = "none";
-
+            box.style.top =
+                (
+                    20 *
+                    zoomLevel
+                ) +
+                "px";
         }
 
 
-        /* -------------------------------------
+        /* =================================================
            RIGHT
-
-           BELOW + LEFT
-           ------------------------------------- */
+           ================================================= */
 
         if (
             point.classList.contains(
@@ -997,25 +1450,33 @@ function positionBoxes() {
             )
         ) {
 
-            const boxWidth =
+            const width =
                 box.offsetWidth;
 
 
             box.style.left =
-                (-boxWidth + 15) + "px";
+                (
+                    -width +
+                    (
+                        15 *
+                        zoomLevel
+                    )
+                ) +
+                "px";
 
-            box.style.top = "15px";
 
-            box.style.transform = "none";
-
+            box.style.top =
+                (
+                    15 *
+                    zoomLevel
+                ) +
+                "px";
         }
 
 
-        /* -------------------------------------
+        /* =================================================
            BOTTOM
-
-           ABOVE + RIGHT
-           ------------------------------------- */
+           ================================================= */
 
         if (
             point.classList.contains(
@@ -1023,21 +1484,28 @@ function positionBoxes() {
             )
         ) {
 
-            box.style.left = "15px";
+            box.style.left =
+                (
+                    15 *
+                    zoomLevel
+                ) +
+                "px";
 
-            box.style.top = "15px";
+            box.style.top =
+                (
+                    15 *
+                    zoomLevel
+                ) +
+                "px";
 
             box.style.transform =
                 "translateY(-100%)";
-
         }
 
 
-        /* -------------------------------------
-           BOTTOM-RIGHT
-
-           ABOVE + LEFT
-           ------------------------------------- */
+        /* =================================================
+           BOTTOM RIGHT
+           ================================================= */
 
         if (
             point.classList.contains(
@@ -1045,18 +1513,31 @@ function positionBoxes() {
             )
         ) {
 
-            const boxWidth =
+            const width =
                 box.offsetWidth;
 
 
             box.style.right =
-                (-boxWidth + 20) + "px";
+                (
+                    -width +
+                    (
+                        20 *
+                        zoomLevel
+                    )
+                ) +
+                "px";
 
-            box.style.top = "10px";
+
+            box.style.top =
+                (
+                    10 *
+                    zoomLevel
+                ) +
+                "px";
+
 
             box.style.transform =
                 "translateY(-100%)";
-
         }
 
     });
@@ -1064,109 +1545,461 @@ function positionBoxes() {
 }
 
 
-/* =========================================
-   CLICK / TAP
-   ========================================= */
+/* =========================================================
+   APPLY ZOOM
+   ========================================================= */
 
-points.forEach(point => {
+function applyZoom(
+    keepCenter = true
+) {
 
-    point.addEventListener(
-        "click",
-        function(event) {
+    const oldScrollWidth =
+        viewport.scrollWidth;
 
-            event.stopPropagation();
+    const oldScrollHeight =
+        viewport.scrollHeight;
 
 
-            points.forEach(
-                otherPoint => {
+    const oldCenterX =
+        viewport.scrollLeft +
+        (
+            viewport.clientWidth /
+            2
+        );
 
-                    if (
-                        otherPoint !== point
-                    ) {
 
-                        otherPoint
-                            .classList
-                            .remove("active");
+    const oldCenterY =
+        viewport.scrollTop +
+        (
+            viewport.clientHeight /
+            2
+        );
 
-                    }
 
-                }
+    const centerRatioX =
+        oldScrollWidth > 0
+            ? oldCenterX /
+              oldScrollWidth
+            : 0.5;
+
+
+    const centerRatioY =
+        oldScrollHeight > 0
+            ? oldCenterY /
+              oldScrollHeight
+            : 0.5;
+
+
+    /* =====================================================
+       MAKE MAP PHYSICALLY BIGGER
+       ===================================================== */
+
+    stage.style.width =
+        (
+            zoomLevel *
+            100
+        ) +
+        "%";
+
+
+    stage.style.minWidth =
+        (
+            zoomLevel *
+            100
+        ) +
+        "%";
+
+
+    /* =====================================================
+       ENLARGE DOTS
+       ===================================================== */
+
+    points.forEach(
+        point => {
+
+            point.style.width =
+                (
+                    30 *
+                    zoomLevel
+                ) +
+                "px";
+
+
+            point.style.height =
+                (
+                    30 *
+                    zoomLevel
+                ) +
+                "px";
+
+
+            point.style.setProperty(
+                "--dot-size",
+                (
+                    12 *
+                    zoomLevel
+                ) +
+                "px"
             );
 
 
-            point.classList.toggle(
-                "active"
+            point.style.setProperty(
+                "--dot-position",
+                (
+                    5 *
+                    zoomLevel
+                ) +
+                "px"
             );
 
         }
     );
 
-});
+
+    /* =====================================================
+       WAIT FOR MAP TO RESIZE
+       ===================================================== */
+
+    requestAnimationFrame(
+        () => {
+
+            positionBoxes();
 
 
-/* =========================================
-   CLICK OUTSIDE
-   ========================================= */
+            if (keepCenter) {
 
-document.addEventListener(
+                const newScrollWidth =
+                    viewport.scrollWidth;
+
+                const newScrollHeight =
+                    viewport.scrollHeight;
+
+
+                /* =========================================
+                   KEEP HORIZONTAL CENTER
+                   ========================================= */
+
+                viewport.scrollLeft =
+                    (
+                        centerRatioX *
+                        newScrollWidth
+                    ) -
+                    (
+                        viewport.clientWidth /
+                        2
+                    );
+
+
+                /* =========================================
+                   KEEP VERTICAL CENTER
+                   ========================================= */
+
+                viewport.scrollTop =
+                    (
+                        centerRatioY *
+                        newScrollHeight
+                    ) -
+                    (
+                        viewport.clientHeight /
+                        2
+                    );
+
+
+                /* =========================================
+                   PREVENT NEGATIVE SCROLL
+                   ========================================= */
+
+                if (
+                    viewport.scrollLeft < 0
+                ) {
+
+                    viewport.scrollLeft = 0;
+                }
+
+
+                if (
+                    viewport.scrollTop < 0
+                ) {
+
+                    viewport.scrollTop = 0;
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ZOOM IN
+   ========================================================= */
+
+zoomIn.addEventListener(
     "click",
-    function() {
+    function(event) {
 
-        points.forEach(point => {
+        event.stopPropagation();
 
-            point.classList.remove(
-                "active"
-            );
 
-        });
+        if (
+            zoomLevel <
+            maxZoom
+        ) {
+
+            zoomLevel +=
+                zoomStep;
+
+
+            if (
+                zoomLevel >
+                maxZoom
+            ) {
+
+                zoomLevel =
+                    maxZoom;
+            }
+
+
+            applyZoom(true);
+        }
 
     }
 );
 
 
-/* =========================================
-   LOAD
-   ========================================= */
+/* =========================================================
+   ZOOM OUT
+   ========================================================= */
 
-window.addEventListener(
-    "load",
-    positionBoxes
+zoomOut.addEventListener(
+    "click",
+    function(event) {
+
+        event.stopPropagation();
+
+
+        if (
+            zoomLevel >
+            minZoom
+        ) {
+
+            zoomLevel -=
+                zoomStep;
+
+
+            if (
+                zoomLevel <
+                minZoom
+            ) {
+
+                zoomLevel =
+                    minZoom;
+            }
+
+
+            applyZoom(true);
+        }
+
+    }
 );
 
 
-/* =========================================
-   RESIZE
-   ========================================= */
+/* =========================================================
+   RESET ZOOM
+   ========================================================= */
+
+zoomReset.addEventListener(
+    "click",
+    function(event) {
+
+        event.stopPropagation();
+
+
+        zoomLevel = 1;
+
+
+        applyZoom(false);
+
+
+        requestAnimationFrame(
+            () => {
+
+                viewport.scrollLeft = 0;
+
+                viewport.scrollTop = 0;
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   MAP POINT CLICK / TAP
+   ========================================================= */
+
+points.forEach(
+    point => {
+
+        point.addEventListener(
+            "click",
+            function(event) {
+
+                event.stopPropagation();
+
+
+                points.forEach(
+                    otherPoint => {
+
+                        if (
+                            otherPoint !==
+                            point
+                        ) {
+
+                            otherPoint
+                                .classList
+                                .remove(
+                                    "active"
+                                );
+                        }
+
+                    }
+                );
+
+
+                point.classList.toggle(
+                    "active"
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   CLICK OUTSIDE
+   ========================================================= */
+
+document.addEventListener(
+    "click",
+    function() {
+
+        points.forEach(
+            point => {
+
+                point.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   DON'T CLOSE DESCRIPTION WHEN CLICKING IT
+   ========================================================= */
+
+points.forEach(
+    point => {
+
+        const box =
+            point.querySelector(
+                ".description"
+            );
+
+
+        if (box) {
+
+            box.addEventListener(
+                "click",
+                function(event) {
+
+                    event.stopPropagation();
+
+                }
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   WINDOW RESIZE
+   ========================================================= */
 
 window.addEventListener(
     "resize",
-    positionBoxes
+    function() {
+
+        positionBoxes();
+
+    }
 );
 
 
-/* =========================================
-   WATCH MAP SIZE
-   ========================================= */
+/* =========================================================
+   RESIZE OBSERVER
+   ========================================================= */
 
 if (
-    typeof ResizeObserver !== "undefined"
+    typeof ResizeObserver !==
+    "undefined"
 ) {
 
     const observer =
         new ResizeObserver(
-            positionBoxes
+            function() {
+
+                positionBoxes();
+
+            }
         );
+
 
     observer.observe(map);
 
 }
 
 
-/* =========================================
-   INITIAL RUN
-   ========================================= */
+/* =========================================================
+   IMAGE LOAD
+   ========================================================= */
 
-positionBoxes();
+const mapImage =
+    document.querySelector(
+        ".map-image"
+    );
+
+
+if (mapImage) {
+
+    mapImage.addEventListener(
+        "load",
+        function() {
+
+            positionBoxes();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INITIAL SETUP
+   ========================================================= */
+
+applyZoom(false);
 
 </script>
 
