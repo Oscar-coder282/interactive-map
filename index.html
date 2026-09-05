@@ -303,10 +303,10 @@ body {
         top: 45%;
 
         --box-width: 25%;
-        --box-scale: 0.5;
+        --box-scale: 0.2;
 
         --text-size: 1%;
-        --text-scale: 0.8;
+        --text-scale: 0.6;
 
         --title-size: 1.7%;
     "
@@ -333,16 +333,16 @@ body {
      ===================================== -->
 
 <div
-    class="map-point position-bottom-right"
+    class="map-point position-default"
     style="
-        left: 85%;
-        top: 80%;
+        left: 88%;
+        top: 42%;
 
-        --box-width: 30%;
-        --box-scale: 1;
+        --box-width: 25%;
+        --box-scale: 0.2;
 
-        --text-size: 1.2%;
-        --text-scale: 0.7;
+        --text-size: 1%;
+        --text-scale: 0.6;
 
         --title-size: 1.7%;
     "
@@ -353,17 +353,11 @@ body {
 
     <div class="description">
 
-        <h2>Location Three</h2>
+        <h2>Japan</h2>
 
         <p>
-            This location is close to the edge
-            of the map.
+            Japan’s moon‑viewing culture was introduced from China over a thousand years ago and evolved into Jūgoya or “Mid‑Autumn Moon.” Japanese people admire the full moon in autumn and offer tsukimi dango (moon‑viewing dumplings), pampas grass, and seasonal crops to express gratitude for nature and the harvest. Compared to China, Japan emphasizes the act of moon‑viewing itself rather than eating mooncakes.
         </p>
-
-        <img
-            src="library.jpg"
-            alt="Library"
-        >
 
     </div>
 
@@ -375,16 +369,16 @@ body {
      ===================================== -->
 
 <div
-    class="map-point position-bottom"
+    class="map-point position-default"
     style="
-        left: 50%;
-        top: 85%;
+        left: 84%;
+        top: 50%;
 
-        --box-width: 22%;
-        --box-scale: 1;
+        --box-width: 40%;
+        --box-scale: 0.2;
 
-        --text-size: 1.2%;
-        --text-scale: 0.7;
+        --text-size: 1%;
+        --text-scale: 0.6;
 
         --title-size: 1.7%;
     "
@@ -395,10 +389,10 @@ body {
 
     <div class="description">
 
-        <h2>Location Four</h2>
+        <h2>Taiwan</h2>
 
         <p>
-            This is another location on the map.
+            The history of the Mid-Autumn Festival in Taiwan comes from traditional Chinese moon-worship and harvest customs brought by early Chinese settlers. Over time, the festival became an important occasion for families to gather, admire the full moon, and celebrate together. In modern Taiwan, traditions have developed to include eating mooncakes and pomelos, giving gifts, and especially barbecuing with family and friends, which became popular in the late 20th century. Today, the Mid-Autumn Festival in Taiwan combines traditional customs with modern celebrations, focusing on family reunion, food, and spending time together.
         </p>
 
     </div>
@@ -500,12 +494,29 @@ function positionBoxes() {
            ALSO SCALES WITH BOX
            ===================================== */
 
-        const padding =
-            15 * boxScale;
+    /*    const padding =
+            25 * boxScale;
 
         box.style.padding =
             padding + "px";
+*/
+        const referenceMapWidth = 1200;
 
+        const paddingTop = 20;
+        const paddingRight = 20;
+        const paddingBottom = 10;
+        const paddingLeft = 20;
+
+        const paddingScale = 1;
+
+        const mapRatio =
+            mapWidth / referenceMapWidth;
+
+        box.style.padding =
+            `${paddingTop * (1 + (mapRatio - 1) * paddingScale)}px
+            ${paddingRight * (1 + (mapRatio - 1) * paddingScale)}px
+            ${paddingBottom * (1 + (mapRatio - 1) * paddingScale)}px
+            ${paddingLeft * (1 + (mapRatio - 1) * paddingScale)}px`;
 
         /* =====================================
            TEXT SIZE
@@ -581,9 +592,9 @@ function positionBoxes() {
             )
         ) {
 
-            box.style.right = "15px";
+            box.style.right = "20px";
 
-            box.style.top = "15px";
+            box.style.top = "20px";
 
             box.style.transform = "none";
 
