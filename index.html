@@ -14,22 +14,13 @@
     box-sizing: border-box;
 }
 
-html,
 body {
     margin: 0;
-    padding: 0;
+    padding: 20px;
     background: #f5f5f5;
     font-family: Arial, sans-serif;
 }
 
-body {
-    padding: 20px;
-}
-
-
-/* =========================================
-   MAP
-   ========================================= */
 
 .map-container {
     position: relative;
@@ -39,20 +30,12 @@ body {
 }
 
 
-/* =========================================
-   PNG MAP
-   ========================================= */
-
 .map-image {
     display: block;
     width: 100%;
     height: auto;
 }
 
-
-/* =========================================
-   MAP POINT
-   ========================================= */
 
 .map-point {
     position: absolute;
@@ -67,10 +50,6 @@ body {
     z-index: 10;
 }
 
-
-/* =========================================
-   RED DOT
-   ========================================= */
 
 .marker {
     width: 20px;
@@ -91,15 +70,9 @@ body {
 }
 
 
-/* =========================================
-   DESCRIPTION BOX
-   ========================================= */
-
 .description {
 
     position: absolute;
-
-    width: var(--box-width, 260px);
 
     background: white;
 
@@ -117,15 +90,8 @@ body {
 
     overflow-wrap: break-word;
 
-    font-size: 14px;
-
-    line-height: 1.5;
 }
 
-
-/* =========================================
-   SHOW BOX WHEN HOVERING
-   ========================================= */
 
 @media (hover: hover) {
 
@@ -136,91 +102,26 @@ body {
 }
 
 
-/* =========================================
-   SHOW BOX WHEN TAPPED
-   ========================================= */
-
 .map-point.active .description {
     display: block;
 }
 
 
-/* =========================================
-   BOX POSITION OPTIONS
-   ========================================= */
-
-
-/* BELOW + RIGHT */
-
-.position-default .description {
-
-    top: 25px;
-    left: 25px;
-
-}
-
-
-/* ABOVE/LEFT SIDE */
-
-.position-right .description {
-
-    top: 25px;
-    right: 40px;
-
-}
-
-
-/* ABOVE + RIGHT */
-
-.position-bottom .description {
-
-    bottom: 25px;
-    left: 25px;
-
-}
-
-
-/* ABOVE + LEFT */
-
-.position-bottom-right .description {
-
-    bottom: 25px;
-    right: 25px;
-
-}
-
-
-/* =========================================
-   DESCRIPTION TITLE
-   ========================================= */
-
 .description h2 {
 
     margin: 0 0 8px 0;
 
-    font-size: 20px;
-
 }
 
-
-/* =========================================
-   DESCRIPTION TEXT
-   ========================================= */
 
 .description p {
 
     margin: 0 0 10px 0;
 
-    font-size: 14px;
-
     line-height: 1.5;
 
 }
 
-
-/* =========================================
-   IMAGE INSIDE DESCRIPTION
-   ========================================= */
 
 .description img {
 
@@ -234,10 +135,6 @@ body {
 
 }
 
-
-/* =========================================
-   LINK
-   ========================================= */
 
 .description a {
 
@@ -259,10 +156,6 @@ body {
 }
 
 
-/* =========================================
-   MOBILE
-   ========================================= */
-
 @media (max-width: 600px) {
 
     body {
@@ -271,10 +164,6 @@ body {
 
 }
 
-
-/* =========================================
-   VERY SMALL PHONE
-   ========================================= */
 
 @media (max-width: 400px) {
 
@@ -292,141 +181,161 @@ body {
 <body>
 
 
-<!-- =========================================
-     MAP START
-     ========================================= -->
-
-<div class="map-container">
+<div class="map-container" id="map">
 
 
-    <!-- =====================================
-         YOUR PNG MAP
-         ===================================== -->
-
-    <img
-        src="unnamed.png"
-        alt="Interactive Map"
-        class="map-image"
-    >
+<img
+    src="unnamed.png"
+    alt="Interactive Map"
+    class="map-image"
+>
 
 
-    <!-- =====================================
-         LOCATION 1
-         ===================================== -->
+<!-- =====================================
+     LOCATION 1
+     ===================================== -->
 
-    <div
-        class="map-point position-default"
-        style="left: 30%; top: 30%; --box-width: 300px;"
-    >
+<div
+    class="map-point position-default"
+    style="
+        left: 30%;
+        top: 30%;
+        --box-width: 25%;
+        --text-size: 1.2%;
+        --title-size: 1.7%;
+        --text-scale: 0.7;
+    "
+>
 
-        <div class="marker"></div>
+    <div class="marker"></div>
 
 
-        <div class="description">
+    <div class="description">
 
-            <h2>Location One</h2>
+        <h2>Location One</h2>
 
-            <p>
-                This is the description for Location One.
-                You can put whatever information you want here.
-            </p>
+        <p>
+            This is the description for Location One.
+            You can put whatever information you want here.
+        </p>
 
-            <img
-                src="castle.jpg"
-                alt="Castle"
-            >
+        <img
+            src="castle.jpg"
+            alt="Castle"
+        >
 
-            <a
-                href="https://example.com"
-                target="_blank"
-            >
-                Learn More
-            </a>
-
-        </div>
+        <a
+            href="https://example.com"
+            target="_blank"
+        >
+            Learn More
+        </a>
 
     </div>
 
-
-    <!-- =====================================
-         LOCATION 2
-         ===================================== -->
-
-    <div
-        class="map-point position-right"
-        style="left: 80%; top: 45%; --box-width: 300px;"
-    >
-
-        <div class="marker"></div>
+</div>
 
 
-        <div class="description">
+<!-- =====================================
+     LOCATION 2
+     ===================================== -->
 
-            <h2>China</h2>
+<div
+    class="map-point position-default"
+    style="
+        left: 80%;
+        top: 45%;
+        --box-width: 25%;
+        --text-size: 1.2%;
+        --title-size: 1.7%;
+        --text-scale: 0.8;
+    "
+>
 
-            <p>
-                The history of the Mid-Autumn Festival in China is linked to ancient moon-worship and harvest customs. Early traditions included autumn moon sacrifices, and by the Tang and Song dynasties, moon-viewing became an important festive activity. In the Northern Song, it developed into a formal festival. Today, the Mid-Autumn Festival emphasizes “reunion,” with families gathering to admire the moon, eat mooncakes, and sometimes engage in rituals such as moon worship and lantern displays.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================
-         LOCATION 3
-         ===================================== -->
-
-    <div
-        class="map-point position-bottom-right"
-        style="left: 85%; top: 80%; --box-width: 350px;"
-    >
-
-        <div class="marker"></div>
+    <div class="marker"></div>
 
 
-        <div class="description">
+    <div class="description">
 
-            <h2>Location Three</h2>
+        <h2>China</h2>
 
-            <p>
-                This location is close to the edge
-                of the map.
-            </p>
-
-            <img
-                src="library.jpg"
-                alt="Library"
-            >
-
-        </div>
+        <p>
+            The history of the Mid-Autumn Festival in China is linked to ancient moon-worship and harvest customs. Early traditions included autumn moon sacrifices, and by the Tang and Song dynasties, moon-viewing became an important festive activity. In the Northern Song, it developed into a formal festival. Today, the Mid-Autumn Festival emphasizes “reunion,” with families gathering to admire the moon, eat mooncakes, and sometimes engage in rituals such as moon worship and lantern displays.
+        </p>
 
     </div>
 
-
-    <!-- =====================================
-         LOCATION 4
-         ===================================== -->
-
-    <div
-        class="map-point position-bottom"
-        style="left: 50%; top: 85%; --box-width: 250px;"
-    >
-
-        <div class="marker"></div>
+</div>
 
 
-        <div class="description">
+<!-- =====================================
+     LOCATION 3
+     ===================================== -->
 
-            <h2>Location Four</h2>
+<div
+    class="map-point position-bottom-right"
+    style="
+        left: 85%;
+        top: 80%;
+        --box-width: 30%;
+        --text-size: 1.2%;
+        --title-size: 1.7%;
+        --text-scale: 0.7;
+    "
+>
 
-            <p>
-                This is another location on the map.
-            </p>
+    <div class="marker"></div>
 
-        </div>
+
+    <div class="description">
+
+        <h2>Location Three</h2>
+
+        <p>
+            This location is close to the edge
+            of the map.
+        </p>
+
+        <img
+            src="library.jpg"
+            alt="Library"
+        >
 
     </div>
+
+</div>
+
+
+<!-- =====================================
+     LOCATION 4
+     ===================================== -->
+
+<div
+    class="map-point position-bottom"
+    style="
+        left: 50%;
+        top: 85%;
+        --box-width: 22%;
+        --text-size: 1.2%;
+        --title-size: 1.7%;
+        --text-scale: 0.7;
+    "
+>
+
+    <div class="marker"></div>
+
+
+    <div class="description">
+
+        <h2>Location Four</h2>
+
+        <p>
+            This is another location on the map.
+        </p>
+
+    </div>
+
+</div>
 
 
 </div>
@@ -434,137 +343,280 @@ body {
 
 <script>
 
-/* =========================================
-   TAP / CLICK SUPPORT
-   ========================================= */
+const map = document.getElementById("map");
 
 const points = document.querySelectorAll(".map-point");
 
 
-points.forEach(point => {
+function positionBoxes() {
 
-    point.addEventListener("click", function(event) {
+    const mapWidth = map.clientWidth;
 
-        event.stopPropagation();
-
-
-        /*
-           Close every other popup
-        */
-
-        points.forEach(otherPoint => {
-
-            if (otherPoint !== point) {
-
-                otherPoint.classList.remove("active");
-
-            }
-
-        });
-
-
-        /*
-           Open / close this popup
-        */
-
-        point.classList.toggle("active");
-
-    });
-
-});
-
-
-/*
-   Clicking anywhere else closes the popup
-*/
-
-document.addEventListener("click", function() {
 
     points.forEach(point => {
 
-        point.classList.remove("active");
+        const box =
+            point.querySelector(".description");
+
+
+        const boxWidthPercent =
+            parseFloat(
+                getComputedStyle(point)
+                .getPropertyValue("--box-width")
+            );
+
+
+        const textSizePercent =
+            parseFloat(
+                getComputedStyle(point)
+                .getPropertyValue("--text-size")
+            );
+
+
+        const titleSizePercent =
+            parseFloat(
+                getComputedStyle(point)
+                .getPropertyValue("--title-size")
+            );
+
+
+        const textScale =
+            parseFloat(
+                getComputedStyle(point)
+                .getPropertyValue("--text-scale")
+            ) || 1;
+
+
+        /* =====================================
+           BOX WIDTH
+           ===================================== */
+
+        if (boxWidthPercent) {
+
+            const boxWidth =
+                mapWidth *
+                (boxWidthPercent / 100);
+
+            box.style.width =
+                boxWidth + "px";
+
+        }
+
+
+        /* =====================================
+           TEXT SIZE
+           ===================================== */
+
+        if (textSizePercent) {
+
+            const textSize =
+                mapWidth *
+                (textSizePercent / 100) *
+                textScale;
+
+            box.style.fontSize =
+                textSize + "px";
+
+        }
+
+
+        /* =====================================
+           TITLE SIZE
+           ===================================== */
+
+        const title =
+            box.querySelector("h2");
+
+
+        if (
+            title &&
+            titleSizePercent
+        ) {
+
+            const titleSize =
+                mapWidth *
+                (titleSizePercent / 100) *
+                textScale;
+
+            title.style.fontSize =
+                titleSize + "px";
+
+        }
+
+
+        /* =====================================
+           POSITION
+           ===================================== */
+
+        if (
+            point.classList.contains(
+                "position-default"
+            )
+        ) {
+
+            box.style.right = "15px";
+
+            box.style.top = "15px";
+
+            box.style.transform = "none";
+
+        }
+
+
+        if (
+            point.classList.contains(
+                "position-right"
+            )
+        ) {
+
+            const boxWidth =
+                box.offsetWidth;
+
+            box.style.left =
+                (-boxWidth + 15) + "px";
+
+            box.style.top = "15px";
+
+            box.style.transform = "none";
+
+        }
+
+
+        if (
+            point.classList.contains(
+                "position-bottom"
+            )
+        ) {
+
+            box.style.left = "15px";
+
+            box.style.top = "15px";
+
+            box.style.transform =
+                "translateY(-100%)";
+
+        }
+
+
+        if (
+            point.classList.contains(
+                "position-bottom-right"
+            )
+        ) {
+
+            const boxWidth =
+                box.offsetWidth;
+
+            box.style.left =
+                (-boxWidth + 15) + "px";
+
+            box.style.top = "15px";
+
+            box.style.transform =
+                "translateY(-100%)";
+
+        }
 
     });
-
-});
-
-
-/* =========================================
-   GOOGLE SITES MOBILE FIX
-   ========================================= */
-
-/*
-   Check whether this page is inside
-   an iframe.
-
-   Google Sites embeds this page inside
-   an iframe.
-*/
-
-const isEmbedded =
-    window.self !== window.top;
-
-
-function applyGoogleSitesFix() {
-
-    const descriptions =
-        document.querySelectorAll(".description");
-
-
-    /*
-       ONLY apply the special scaling
-       when the page is embedded.
-    */
-
-    if (isEmbedded) {
-
-        descriptions.forEach(box => {
-
-            box.style.transform = "scale(0.55)";
-
-            box.style.transformOrigin = "top left";
-
-        });
-
-    }
-
-
-    /*
-       Standalone GitHub Pages version
-       stays completely normal.
-    */
-
-    else {
-
-        descriptions.forEach(box => {
-
-            box.style.transform = "";
-
-            box.style.transformOrigin = "";
-
-        });
-
-    }
 
 }
 
 
 /* =========================================
-   RUN FIX
+   CLICK / TAP
    ========================================= */
 
-applyGoogleSitesFix();
+points.forEach(point => {
+
+    point.addEventListener(
+        "click",
+        function(event) {
+
+            event.stopPropagation();
+
+
+            points.forEach(
+                otherPoint => {
+
+                    if (
+                        otherPoint !== point
+                    ) {
+
+                        otherPoint
+                            .classList
+                            .remove("active");
+
+                    }
+
+                }
+            );
+
+
+            point.classList.toggle("active");
+
+        }
+    );
+
+});
 
 
 /* =========================================
-   RUN AGAIN WHEN RESIZED
+   CLICK OUTSIDE
+   ========================================= */
+
+document.addEventListener(
+    "click",
+    function() {
+
+        points.forEach(point => {
+
+            point.classList.remove("active");
+
+        });
+
+    }
+);
+
+
+/* =========================================
+   RESIZE
    ========================================= */
 
 window.addEventListener(
-    "resize",
-    applyGoogleSitesFix
+    "load",
+    positionBoxes
 );
 
+
+window.addEventListener(
+    "resize",
+    positionBoxes
+);
+
+
+/* =========================================
+   WATCH MAP SIZE
+   ========================================= */
+
+if (
+    typeof ResizeObserver !== "undefined"
+) {
+
+    const observer =
+        new ResizeObserver(
+            positionBoxes
+        );
+
+    observer.observe(map);
+
+}
+
+
+/* =========================================
+   INITIAL RUN
+   ========================================= */
+
+positionBoxes();
 
 </script>
 
