@@ -14,16 +14,11 @@
     box-sizing: border-box;
 }
 
-html,
 body {
     margin: 0;
-    padding: 0;
+    padding: 20px;
     background: #f5f5f5;
     font-family: Arial, sans-serif;
-}
-
-body {
-    padding: 20px;
 }
 
 
@@ -99,8 +94,6 @@ body {
 
     position: absolute;
 
-    width: var(--box-width, 260px);
-
     background: white;
 
     padding: 15px;
@@ -117,14 +110,11 @@ body {
 
     overflow-wrap: break-word;
 
-    font-size: 14px;
-
-    line-height: 1.5;
 }
 
 
 /* =========================================
-   SHOW BOX WHEN HOVERING
+   SHOW BOX ON DESKTOP
    ========================================= */
 
 @media (hover: hover) {
@@ -142,51 +132,6 @@ body {
 
 .map-point.active .description {
     display: block;
-}
-
-
-/* =========================================
-   BOX POSITION OPTIONS
-   ========================================= */
-
-
-/* BELOW + RIGHT */
-
-.position-default .description {
-
-    top: 25px;
-    left: 25px;
-
-}
-
-
-/* ABOVE/LEFT SIDE */
-
-.position-right .description {
-
-    top: 25px;
-    right: 40px;
-
-}
-
-
-/* ABOVE + RIGHT */
-
-.position-bottom .description {
-
-    bottom: 25px;
-    left: 25px;
-
-}
-
-
-/* ABOVE + LEFT */
-
-.position-bottom-right .description {
-
-    bottom: 25px;
-    right: 25px;
-
 }
 
 
@@ -293,15 +238,11 @@ body {
 
 
 <!-- =========================================
-     MAP START
+     MAP
      ========================================= -->
 
-<div class="map-container">
+<div class="map-container" id="map">
 
-
-    <!-- =====================================
-         YOUR PNG MAP
-         ===================================== -->
 
     <img
         src="unnamed.png"
@@ -316,7 +257,11 @@ body {
 
     <div
         class="map-point position-default"
-        style="left: 30%; top: 30%; --box-width: 300px;"
+        style="
+            left: 30%;
+            top: 30%;
+            --box-width: 25%;
+        "
     >
 
         <div class="marker"></div>
@@ -354,7 +299,11 @@ body {
 
     <div
         class="map-point position-right"
-        style="left: 80%; top: 45%; --box-width: 300px;"
+        style="
+            left: 80%;
+            top: 45%;
+            --box-width: 25%;
+        "
     >
 
         <div class="marker"></div>
@@ -379,7 +328,11 @@ body {
 
     <div
         class="map-point position-bottom-right"
-        style="left: 85%; top: 80%; --box-width: 350px;"
+        style="
+            left: 85%;
+            top: 80%;
+            --box-width: 30%;
+        "
     >
 
         <div class="marker"></div>
@@ -410,7 +363,11 @@ body {
 
     <div
         class="map-point position-bottom"
-        style="left: 50%; top: 85%; --box-width: 250px;"
+        style="
+            left: 50%;
+            top: 85%;
+            --box-width: 22%;
+        "
     >
 
         <div class="marker"></div>
@@ -435,136 +392,265 @@ body {
 <script>
 
 /* =========================================
-   TAP / CLICK SUPPORT
+   MAP
    ========================================= */
+
+const map = document.getElementById("map");
 
 const points = document.querySelectorAll(".map-point");
 
 
-points.forEach(point => {
+/* =========================================
+   POSITION POPUPS
+   ========================================= */
 
-    point.addEventListener("click", function(event) {
+function positionBoxes() {
 
-        event.stopPropagation();
+    const mapWidth = map.clientWidth;
 
+    const mapHeight = map.clientHeight;
 
-        /*
-           Close every other popup
-        */
-
-        points.forEach(otherPoint => {
-
-            if (otherPoint !== point) {
-
-                otherPoint.classList.remove("active");
-
-            }
-
-        });
-
-
-        /*
-           Open / close this popup
-        */
-
-        point.classList.toggle("active");
-
-    });
-
-});
-
-
-/*
-   Clicking anywhere else closes the popup
-*/
-
-document.addEventListener("click", function() {
 
     points.forEach(point => {
 
-        point.classList.remove("active");
+        const box =
+            point.querySelector(".description");
+
+
+        /*
+           Get the width percentage
+           from the individual point.
+        */
+
+        const boxWidthPercent =
+            parseFloat(
+                getComputedStyle(point)
+                .getPropertyValue("--box-width")
+            );
+
+
+        if (!boxWidthPercent) {
+            return;
+        }
+
+
+        /*
+           Convert the percentage into
+           an actual width based on the map.
+        */
+
+        const boxWidth =
+            mapWidth * (boxWidthPercent / 100);
+
+
+        box.style.width =
+            boxWidth + "px";
+
+
+        /*
+           IMPORTANT:
+
+           The popup is INSIDE the map-point.
+
+           Therefore we do NOT use the dot's
+           map coordinates here.
+
+           We only position the popup relative
+           to its own dot.
+        */
+
+
+        /* =====================================
+           DEFAULT
+           BELOW + RIGHT
+           ===================================== */
+
+        if (
+            point.classList.contains(
+                "position-default"
+            )
+        ) {
+
+            box.style.left = "15px";
+
+            box.style.top = "15px";
+
+            box.style.transform = "none";
+
+        }
+
+
+        /* =====================================
+           RIGHT
+           BELOW + LEFT
+           ===================================== */
+
+        if (
+            point.classList.contains(
+                "position-right"
+            )
+        ) {
+
+            box.style.left =
+                (-boxWidth + 15) + "px";
+
+            box.style.top = "15px";
+
+            box.style.transform = "none";
+
+        }
+
+
+        /* =====================================
+           BOTTOM
+           ABOVE + RIGHT
+           ===================================== */
+
+        if (
+            point.classList.contains(
+                "position-bottom"
+            )
+        ) {
+
+            box.style.left = "15px";
+
+            box.style.top = "15px";
+
+            box.style.transform =
+                "translateY(-100%)";
+
+        }
+
+
+        /* =====================================
+           BOTTOM-RIGHT
+           ABOVE + LEFT
+           ===================================== */
+
+        if (
+            point.classList.contains(
+                "position-bottom-right"
+            )
+        ) {
+
+            box.style.left =
+                (-boxWidth + 15) + "px";
+
+            box.style.top = "15px";
+
+            box.style.transform =
+                "translateY(-100%)";
+
+        }
 
     });
-
-});
-
-
-/* =========================================
-   GOOGLE SITES MOBILE FIX
-   ========================================= */
-
-/*
-   Check whether this page is inside
-   an iframe.
-
-   Google Sites embeds this page inside
-   an iframe.
-*/
-
-const isEmbedded =
-    window.self !== window.top;
-
-
-function applyGoogleSitesFix() {
-
-    const descriptions =
-        document.querySelectorAll(".description");
-
-
-    /*
-       ONLY apply the special scaling
-       when the page is embedded.
-    */
-
-    if (isEmbedded) {
-
-        descriptions.forEach(box => {
-
-            box.style.transform = "scale(0.55)";
-
-            box.style.transformOrigin = "top left";
-
-        });
-
-    }
-
-
-    /*
-       Standalone GitHub Pages version
-       stays completely normal.
-    */
-
-    else {
-
-        descriptions.forEach(box => {
-
-            box.style.transform = "";
-
-            box.style.transformOrigin = "";
-
-        });
-
-    }
 
 }
 
 
 /* =========================================
-   RUN FIX
+   CLICK / TAP
    ========================================= */
 
-applyGoogleSitesFix();
+points.forEach(point => {
+
+    point.addEventListener(
+        "click",
+        function(event) {
+
+            event.stopPropagation();
+
+
+            points.forEach(
+                otherPoint => {
+
+                    if (
+                        otherPoint !== point
+                    ) {
+
+                        otherPoint
+                            .classList
+                            .remove("active");
+
+                    }
+
+                }
+            );
+
+
+            point.classList.toggle(
+                "active"
+            );
+
+        }
+    );
+
+});
 
 
 /* =========================================
-   RUN AGAIN WHEN RESIZED
+   CLICK OUTSIDE
+   ========================================= */
+
+document.addEventListener(
+    "click",
+    function() {
+
+        points.forEach(point => {
+
+            point.classList.remove(
+                "active"
+            );
+
+        });
+
+    }
+);
+
+
+/* =========================================
+   INITIAL POSITION
+   ========================================= */
+
+window.addEventListener(
+    "load",
+    positionBoxes
+);
+
+
+/* =========================================
+   RESIZE
    ========================================= */
 
 window.addEventListener(
     "resize",
-    applyGoogleSitesFix
+    positionBoxes
 );
 
+
+/* =========================================
+   WATCH FOR MAP RESIZING
+   ========================================= */
+
+if (
+    typeof ResizeObserver !== "undefined"
+) {
+
+    const observer =
+        new ResizeObserver(
+            positionBoxes
+        );
+
+    observer.observe(map);
+
+}
+
+
+/* =========================================
+   INITIAL RUN
+   ========================================= */
+
+positionBoxes();
 
 </script>
 
