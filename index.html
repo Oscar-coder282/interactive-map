@@ -35,7 +35,6 @@ body {
 
 /* =========================================================
    MAP SHELL
-   Controls are attached to this, NOT the scrolling map.
    ========================================================= */
 
 .map-shell {
@@ -48,7 +47,7 @@ body {
 
 /* =========================================================
    MAP VIEWPORT
-   This is the area that can move LEFT/RIGHT and UP/DOWN.
+   Allows movement in BOTH directions.
    ========================================================= */
 
 .map-viewport {
@@ -72,15 +71,12 @@ body {
     background: #f5f5f5;
 
     touch-action: pan-x pan-y;
-
-    scrollbar-width: auto;
 }
 
 
 /* =========================================================
    ZOOM CONTROLS
-   These stay in the same visible position.
-   They are OUTSIDE the scrolling viewport.
+   These stay in the same position on the screen.
    ========================================================= */
 
 .zoom-controls {
@@ -107,10 +103,6 @@ body {
         0 3px 12px rgba(0,0,0,0.25);
 }
 
-
-/* =========================================================
-   ZOOM BUTTONS
-   ========================================================= */
 
 .zoom-controls button {
 
@@ -173,9 +165,7 @@ body {
 
 /* =========================================================
    MAP STAGE
-   The stage becomes wider when zoomed.
-   Because the image keeps its aspect ratio, it also
-   becomes taller automatically.
+   This becomes larger when zooming.
    ========================================================= */
 
 .map-stage {
@@ -224,7 +214,15 @@ body {
 
 /* =========================================================
    MAP POINT
-   Positions remain percentage based.
+
+   IMPORTANT:
+   The point's physical size is NOT increased with zoom.
+
+   Its position is still controlled by:
+       left: XX%;
+       top: XX%;
+
+   so it stays attached to the correct map location.
    ========================================================= */
 
 .map-point {
@@ -256,6 +254,8 @@ body {
 
 /* =========================================================
    RED DOT
+
+   Dot stays approximately the same screen size.
    ========================================================= */
 
 .marker {
@@ -283,6 +283,9 @@ body {
 
 /* =========================================================
    DESCRIPTION BOX
+
+   Its width and text are calculated independently of
+   the zoom level so the box does not become enormous.
    ========================================================= */
 
 .description {
@@ -447,7 +450,7 @@ body {
 
 
 /* =========================================================
-   VERY SMALL PHONES
+   VERY SMALL PHONE
    ========================================================= */
 
 @media (max-width: 400px) {
@@ -505,7 +508,6 @@ body {
 
     <!-- =====================================================
          ZOOM CONTROLS
-         These do NOT move when the map is panned.
          ===================================================== -->
 
     <div class="zoom-controls">
@@ -1190,8 +1192,26 @@ function positionBoxes() {
             1200;
 
 
-        const mapRatio =
+        /*
+         * IMPORTANT:
+         *
+         * We use the map's NORMAL display width as the
+         * reference, rather than multiplying the UI sizes
+         * by zoomLevel.
+         *
+         * This means the map can become 2×, 3× or 4× larger
+         * while the description remains approximately the
+         * same physical size.
+         */
+
+
+        const normalMapWidth =
             mapWidth /
+            zoomLevel;
+
+
+        const mapRatio =
+            normalMapWidth /
             referenceMapWidth;
 
 
@@ -1337,7 +1357,7 @@ function positionBoxes() {
 
 
         /* =================================================
-           DEFAULT
+           DESCRIPTION POSITIONS
            ================================================= */
 
         if (
@@ -1347,24 +1367,12 @@ function positionBoxes() {
         ) {
 
             box.style.right =
-                (
-                    20 *
-                    zoomLevel
-                ) +
-                "px";
+                "20px";
 
             box.style.top =
-                (
-                    20 *
-                    zoomLevel
-                ) +
-                "px";
+                "20px";
         }
 
-
-        /* =================================================
-           UPPER RIGHT / LEFT CLASS
-           ================================================= */
 
         if (
             point.classList.contains(
@@ -1373,24 +1381,12 @@ function positionBoxes() {
         ) {
 
             box.style.right =
-                (
-                    25 *
-                    zoomLevel
-                ) +
-                "px";
+                "25px";
 
             box.style.top =
-                (
-                    -30 *
-                    zoomLevel
-                ) +
-                "px";
+                "-30px";
         }
 
-
-        /* =================================================
-           UPPER LEFT
-           ================================================= */
 
         if (
             point.classList.contains(
@@ -1399,24 +1395,12 @@ function positionBoxes() {
         ) {
 
             box.style.right =
-                (
-                    25 *
-                    zoomLevel
-                ) +
-                "px";
+                "25px";
 
             box.style.top =
-                (
-                    -90 *
-                    zoomLevel
-                ) +
-                "px";
+                "-90px";
         }
 
-
-        /* =================================================
-           LEFT
-           ================================================= */
 
         if (
             point.classList.contains(
@@ -1425,24 +1409,12 @@ function positionBoxes() {
         ) {
 
             box.style.left =
-                (
-                    20 *
-                    zoomLevel
-                ) +
-                "px";
+                "20px";
 
             box.style.top =
-                (
-                    20 *
-                    zoomLevel
-                ) +
-                "px";
+                "20px";
         }
 
-
-        /* =================================================
-           RIGHT
-           ================================================= */
 
         if (
             point.classList.contains(
@@ -1457,26 +1429,15 @@ function positionBoxes() {
             box.style.left =
                 (
                     -width +
-                    (
-                        15 *
-                        zoomLevel
-                    )
+                    15
                 ) +
                 "px";
 
 
             box.style.top =
-                (
-                    15 *
-                    zoomLevel
-                ) +
-                "px";
+                "15px";
         }
 
-
-        /* =================================================
-           BOTTOM
-           ================================================= */
 
         if (
             point.classList.contains(
@@ -1485,27 +1446,15 @@ function positionBoxes() {
         ) {
 
             box.style.left =
-                (
-                    15 *
-                    zoomLevel
-                ) +
-                "px";
+                "15px";
 
             box.style.top =
-                (
-                    15 *
-                    zoomLevel
-                ) +
-                "px";
+                "15px";
 
             box.style.transform =
                 "translateY(-100%)";
         }
 
-
-        /* =================================================
-           BOTTOM RIGHT
-           ================================================= */
 
         if (
             point.classList.contains(
@@ -1520,21 +1469,13 @@ function positionBoxes() {
             box.style.right =
                 (
                     -width +
-                    (
-                        20 *
-                        zoomLevel
-                    )
+                    20
                 ) +
                 "px";
 
 
             box.style.top =
-                (
-                    10 *
-                    zoomLevel
-                ) +
-                "px";
-
+                "10px";
 
             box.style.transform =
                 "translateY(-100%)";
@@ -1591,7 +1532,7 @@ function applyZoom(
 
 
     /* =====================================================
-       MAKE MAP PHYSICALLY BIGGER
+       MAKE THE MAP PHYSICALLY LARGER
        ===================================================== */
 
     stage.style.width =
@@ -1611,45 +1552,29 @@ function applyZoom(
 
 
     /* =====================================================
-       ENLARGE DOTS
+       KEEP DOTS THE SAME SCREEN SIZE
        ===================================================== */
 
     points.forEach(
         point => {
 
             point.style.width =
-                (
-                    30 *
-                    zoomLevel
-                ) +
-                "px";
+                "30px";
 
 
             point.style.height =
-                (
-                    30 *
-                    zoomLevel
-                ) +
-                "px";
+                "30px";
 
 
             point.style.setProperty(
                 "--dot-size",
-                (
-                    12 *
-                    zoomLevel
-                ) +
-                "px"
+                "12px"
             );
 
 
             point.style.setProperty(
                 "--dot-position",
-                (
-                    5 *
-                    zoomLevel
-                ) +
-                "px"
+                "5px"
             );
 
         }
@@ -1657,7 +1582,8 @@ function applyZoom(
 
 
     /* =====================================================
-       WAIT FOR MAP TO RESIZE
+       RECALCULATE DESCRIPTION SIZES
+       WITHOUT MAKING THEM GROW WITH ZOOM
        ===================================================== */
 
     requestAnimationFrame(
@@ -1713,7 +1639,8 @@ function applyZoom(
                     viewport.scrollLeft < 0
                 ) {
 
-                    viewport.scrollLeft = 0;
+                    viewport.scrollLeft =
+                        0;
                 }
 
 
@@ -1721,7 +1648,8 @@ function applyZoom(
                     viewport.scrollTop < 0
                 ) {
 
-                    viewport.scrollTop = 0;
+                    viewport.scrollTop =
+                        0;
                 }
 
             }
